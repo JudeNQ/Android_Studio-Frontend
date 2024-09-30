@@ -13,7 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.eventcal.ui.theme.EventCalTheme
 
+import com.example.eventcal.pojo.CreateUserResponse
+import com.example.eventcal.pojo.MultipleResource
+import com.example.eventcal.pojo.User
+import com.example.eventcal.pojo.UserList
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
 class MainActivity : ComponentActivity() {
+
+    private lateinit var apiInterface: APIInterface
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,6 +39,23 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        apiInterface = APIClient.getClient().create(APIInterface::class.java)
+    }
+
+    private fun doGetUserList() {
+        val call = apiInterface.doGetUserList()
+        call.enqueue(object : Callback<UserList> {
+            override fun onResponse(call: Call<UserList>, response: Response<UserList>) {
+                if (response.isSuccessful && response.body() != null) {
+                    // TODO: Process data
+                    // Maybe get the user data and print it?
+                }
+            }
+
+            override fun onFailure(call: Call<UserList>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
     }
 }
 
