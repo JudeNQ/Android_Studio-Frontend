@@ -22,7 +22,7 @@ public class APIClient {
 
         retrofit = new Retrofit.Builder()
                 //Change baseUrl to the django server (somehow)
-                .baseUrl("https://reqres.in/")
+                .baseUrl(BASEURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
@@ -32,14 +32,3 @@ public class APIClient {
         return retrofit;
     }
 }
-
-
-
-
-
-
-
-
-
-
-

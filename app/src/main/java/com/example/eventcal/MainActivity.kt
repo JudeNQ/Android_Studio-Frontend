@@ -38,13 +38,13 @@ class MainActivity : ComponentActivity() {
             }
         }
         apiInterface = APIClient.getClient().create(APIInterface::class.java)
-        var user : TestUser = TestUser("Steve Jobs", "Jobs")
-        createTestUser(user) {
+        var user : User = User("CamdenMcCoy@my.unt.edu", "testPass")
+        createUser(user) {
             //Where you can check the response "it"
             if(it == null) {
                 print("Hmm")
             }
-            print(it?.id)
+            print(it?.name)
         }
     }
 
@@ -76,6 +76,11 @@ class MainActivity : ComponentActivity() {
         call.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
                 val user1 = response.body()
+                Toast.makeText(
+                    applicationContext,
+                    ((user1!!.name + " " + user1.name).toString() + " " + user1.email).toString() + " " + user1.password,
+                    Toast.LENGTH_SHORT
+                ).show()
                 //Check to see the returned User Data is valid?
                 onResult(user1)
             }
