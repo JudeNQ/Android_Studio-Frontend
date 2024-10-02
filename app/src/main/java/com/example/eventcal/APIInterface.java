@@ -1,6 +1,7 @@
 package com.example.eventcal;
 
 import com.example.eventcal.pojo.MultipleResource;
+import com.example.eventcal.pojo.TestUser;
 import com.example.eventcal.pojo.User;
 import com.example.eventcal.pojo.UserList;
 
@@ -13,11 +14,14 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface APIInterface {
-    @GET("/api/unknown")
+    @GET("")
     Call<MultipleResource> doGetListResources();
 
     @POST("user/create/")
     Call<User> createUser(@Body User user);
+
+    @POST("api/users/")
+    Call<TestUser> createTestUser(@Body TestUser user);
 
     @GET("users")
     Call<UserList> doGetUserList();

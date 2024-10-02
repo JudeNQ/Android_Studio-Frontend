@@ -14,6 +14,8 @@ public class MultipleResource {
     public Integer total;
     @SerializedName("total_pages")
     public Integer totalPages;
+    @SerializedName("email_url")
+    public String emailUrl;
     @SerializedName("data")
     public List<Datum> data = new ArrayList<>();
 
