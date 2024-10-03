@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "EventCal"
 include(":app")
- 
+include(":app:lib")
