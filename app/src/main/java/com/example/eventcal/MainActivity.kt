@@ -13,8 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.eventcal.pojo.CreateUser
-import com.example.eventcal.pojo.MultipleResource
-import com.example.eventcal.pojo.TestUser
+import com.example.eventcal.pojo.Event
+import com.example.eventcal.pojo.EventList
 import com.example.eventcal.pojo.LoginUser
 import com.example.eventcal.ui.theme.EventCalTheme
 import retrofit2.Call
@@ -39,7 +39,8 @@ class MainActivity : ComponentActivity() {
             }
         }
         apiInterface = APIClient.getClient().create(APIInterface::class.java)
-        var createUser : CreateUser = CreateUser("JaneSchmane@my.unt.edu", "password")
+        /*
+        var createUser : CreateUser = CreateUser("JaneSchmane@gmail.com", "password")
         createUser(createUser) {
             //do something
             if(it == null) {
@@ -49,6 +50,21 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(
                     applicationContext,
                     it.message.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+         */
+        var createEvent : Event = Event("OPC Pottery", "OPC", "12:00", "14:00", "10/15/2024", "Union 342", "Come do pottery with the OPC")
+        createEvent(createEvent) {
+            //do something
+            if(it == null) {
+
+            }
+            else {
+                Toast.makeText(
+                    applicationContext,
+                    it.message.toString() + " " + it.eventId.toString(),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -112,7 +128,7 @@ class MainActivity : ComponentActivity() {
     //to make sure the attempt succeeded.
     private fun createUser(userInfo : CreateUser, onResult : (CreateUser?) -> Unit) {
         var createUser : CreateUser = userInfo
-        val call = apiInterface.create(createUser)
+        val call = apiInterface.createUser(createUser)
         call.enqueue(object : Callback<CreateUser> {
             override fun onResponse(call: Call<CreateUser>, response: Response<CreateUser>) {
                 val user1 = response.body()
@@ -121,6 +137,36 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun onFailure(call: Call<CreateUser>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    private fun createEvent(eventInfo : Event, onResult : (Event?) -> Unit) {
+        var createEvent : Event = eventInfo
+        val call = apiInterface.createEvent(createEvent)
+        call.enqueue(object : Callback<Event> {
+            override fun onResponse(call: Call<Event>, response: Response<Event>) {
+                val event = response.body()
+                //Check to see the returned User Data is valid?
+                onResult(event)
+            }
+
+            override fun onFailure(call: Call<Event>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    private fun doGetEventList(date : String, onResult : (EventList?) -> Unit) {
+        val call: Call<EventList> = apiInterface.doGetEventList(date)
+        call.enqueue(object : Callback<EventList> {
+            override fun onResponse(call: Call<EventList>, response: Response<EventList>) {
+                val eventL =response.body()
+                onResult(eventL)
+            }
+
+            override fun onFailure(call: Call<EventList>, t: Throwable) {
                 onResult(null)
             }
         })
