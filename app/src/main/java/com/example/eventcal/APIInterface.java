@@ -3,6 +3,7 @@ package com.example.eventcal;
 import com.example.eventcal.pojo.CreateUser;
 import com.example.eventcal.pojo.EventList;
 import com.example.eventcal.pojo.MultipleResource;
+import com.example.eventcal.pojo.SaveEvent;
 import com.example.eventcal.pojo.TestUser;
 import com.example.eventcal.pojo.LoginUser;
 import com.example.eventcal.pojo.UserList;
@@ -34,6 +35,12 @@ public interface APIInterface {
 
     @GET("events/getall?")
     Call<EventList> doGetEventList(@Query("date") String date);
+
+    @GET("events/getusers?")
+    Call<EventList> doGetUsersEvents(@Query("user") String userId);
+
+    @POST("events/saveEvent/")
+    Call<SaveEvent> saveEvent(@Body SaveEvent saveEvent);
 
     @FormUrlEncoded
     @POST("/api/users?")

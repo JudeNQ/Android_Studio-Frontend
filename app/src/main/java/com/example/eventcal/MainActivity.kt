@@ -55,6 +55,7 @@ class MainActivity : ComponentActivity() {
             }
         }
          */
+        /*
         var createEvent : Event = Event("OPC Pottery", "OPC", "12:00", "14:00", "10/15/2024", "Union 342", "Come do pottery with the OPC")
         createEvent(createEvent) {
             //do something
@@ -65,6 +66,21 @@ class MainActivity : ComponentActivity() {
                 Toast.makeText(
                     applicationContext,
                     it.message.toString() + " " + it.eventId.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+         */
+
+        doGetEventList("10/8/2024") {
+            //do something
+            if(it == null) {
+
+            }
+            else {
+                Toast.makeText(
+                    applicationContext,
+                    it.total.toString() + " " + it.data.get(0).eventName.toString(),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -158,6 +174,7 @@ class MainActivity : ComponentActivity() {
         })
     }
 
+    //Enter date in MM/DD/YYYY format please :pray:
     private fun doGetEventList(date : String, onResult : (EventList?) -> Unit) {
         val call: Call<EventList> = apiInterface.doGetEventList(date)
         call.enqueue(object : Callback<EventList> {
