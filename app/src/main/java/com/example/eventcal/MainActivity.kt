@@ -12,9 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.eventcal.pojo.MultipleResource
-import com.example.eventcal.pojo.TestUser
-import com.example.eventcal.pojo.User
+import com.example.eventcal.pojo.CreateUser
+import com.example.eventcal.pojo.Event
+import com.example.eventcal.pojo.EventList
+import com.example.eventcal.pojo.LoginUser
 import com.example.eventcal.ui.theme.EventCalTheme
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,30 +39,101 @@ class MainActivity : ComponentActivity() {
             }
         }
         apiInterface = APIClient.getClient().create(APIInterface::class.java)
-        var user : User = User("CamdenMcCoy@my.unt.edu", "testPass")
-        createUser(user) {
+        /*
+        var createUser : CreateUser = CreateUser("JaneSchmane@gmail.com", "password")
+        createUser(createUser) {
+            //do something
+            if(it == null) {
+
+            }
+            else {
+                Toast.makeText(
+                    applicationContext,
+                    it.message.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+         */
+        /*
+        var createEvent : Event = Event("OPC Pottery", "OPC", "12:00", "14:00", "10/15/2024", "Union 342", "Come do pottery with the OPC")
+        createEvent(createEvent) {
+            //do something
+            if(it == null) {
+
+            }
+            else {
+                Toast.makeText(
+                    applicationContext,
+                    it.message.toString() + " " + it.eventId.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+         */
+
+        doGetEventList("10/8/2024") {
+            //do something
+            if(it == null) {
+
+            }
+            else {
+                Toast.makeText(
+                    applicationContext,
+                    it.total.toString() + " " + it.data.get(0).eventName.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        var loginUser : LoginUser =
+            LoginUser(
+                "CamdenMcCoy@my.unt.edu",
+                "wrongPass"
+            )
+        /*
+        loginUser(loginUser) {
             //Where you can check the response "it"
             if(it == null) {
                 print("Hmm")
             }
-            print(it?.name)
+            else {
+                if(it.confirmed == "True") {
+                    Toast.makeText(
+                        applicationContext,
+                        "Login Successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else {
+                    Toast.makeText(
+                        applicationContext,
+                        "Login Failed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            }
         }
+        */
     }
 
-    private fun doGetListResources() {
-        val call = apiInterface.doGetListResources()
-        call.enqueue(object : Callback<MultipleResource> {
-            override fun onResponse(call: Call<MultipleResource>, response: Response<MultipleResource>) {
-                if (response.isSuccessful && response.body() != null) {
-                    // TODO: Process data
-                    // Maybe get the user data and print it?
-                    print(response.body());
-                }
+    //Attempts to create a user with the given userInfo.
+    //Kind of returns (does something weird with calling "it" after)
+    //the Userinfo result from server, so can compare
+    //to make sure the attempt succeeded.
+    private fun loginUser(loginUserInfo : LoginUser, onResult : (LoginUser?) -> Unit) {
+        var loginUser : LoginUser = loginUserInfo
+        val call = apiInterface.login(loginUser)
+        call.enqueue(object : Callback<LoginUser> {
+            override fun onResponse(call: Call<LoginUser>, response: Response<LoginUser>) {
+                val user1 = response.body()
+                //Check to see the returned User Data is valid?
+                onResult(user1)
             }
 
-            override fun onFailure(call: Call<MultipleResource>, t: Throwable) {
-                t.printStackTrace()
-                print("Failed")
+            override fun onFailure(call: Call<LoginUser>, t: Throwable) {
+                onResult(null)
             }
         })
     }
@@ -70,44 +142,48 @@ class MainActivity : ComponentActivity() {
     //Kind of returns (does something weird with calling "it" after)
     //the Userinfo result from server, so can compare
     //to make sure the attempt succeeded.
-    private fun createUser(userInfo : User, onResult : (User?) -> Unit) {
-        var user : User = userInfo
-        val call = apiInterface.createUser(user)
-        call.enqueue(object : Callback<User> {
-            override fun onResponse(call: Call<User>, response: Response<User>) {
+    private fun createUser(userInfo : CreateUser, onResult : (CreateUser?) -> Unit) {
+        var createUser : CreateUser = userInfo
+        val call = apiInterface.createUser(createUser)
+        call.enqueue(object : Callback<CreateUser> {
+            override fun onResponse(call: Call<CreateUser>, response: Response<CreateUser>) {
                 val user1 = response.body()
-                Toast.makeText(
-                    applicationContext,
-                    ((user1!!.name + " " + user1.name).toString() + " " + user1.email).toString() + " " + user1.password,
-                    Toast.LENGTH_SHORT
-                ).show()
                 //Check to see the returned User Data is valid?
                 onResult(user1)
             }
 
-            override fun onFailure(call: Call<User>, t: Throwable) {
+            override fun onFailure(call: Call<CreateUser>, t: Throwable) {
                 onResult(null)
             }
         })
     }
 
-    private fun createTestUser(userInfo : TestUser, onResult : (TestUser?) -> Unit) {
-        var user : TestUser = userInfo
-        val call = apiInterface.createTestUser(user)
-        call.enqueue(object : Callback<TestUser> {
-            override fun onResponse(call: Call<TestUser>, response: Response<TestUser>) {
-                val user1 = response.body()
-                Toast.makeText(
-                    applicationContext,
-                    ((user1!!.name + " " + user1.job).toString() + " " + user1.id).toString() + " " + user1.createdAt,
-                    Toast.LENGTH_SHORT
-                ).show()
+    private fun createEvent(eventInfo : Event, onResult : (Event?) -> Unit) {
+        var createEvent : Event = eventInfo
+        val call = apiInterface.createEvent(createEvent)
+        call.enqueue(object : Callback<Event> {
+            override fun onResponse(call: Call<Event>, response: Response<Event>) {
+                val event = response.body()
                 //Check to see the returned User Data is valid?
-                onResult(user1)
+                onResult(event)
             }
 
-            override fun onFailure(call: Call<TestUser>, t: Throwable) {
-                call.cancel()
+            override fun onFailure(call: Call<Event>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    //Enter date in MM/DD/YYYY format please :pray:
+    private fun doGetEventList(date : String, onResult : (EventList?) -> Unit) {
+        val call: Call<EventList> = apiInterface.doGetEventList(date)
+        call.enqueue(object : Callback<EventList> {
+            override fun onResponse(call: Call<EventList>, response: Response<EventList>) {
+                val eventL =response.body()
+                onResult(eventL)
+            }
+
+            override fun onFailure(call: Call<EventList>, t: Throwable) {
                 onResult(null)
             }
         })

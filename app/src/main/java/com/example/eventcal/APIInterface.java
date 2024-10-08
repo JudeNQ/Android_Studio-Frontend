@@ -1,9 +1,13 @@
 package com.example.eventcal;
 
+import com.example.eventcal.pojo.CreateUser;
+import com.example.eventcal.pojo.EventList;
 import com.example.eventcal.pojo.MultipleResource;
+import com.example.eventcal.pojo.SaveEvent;
 import com.example.eventcal.pojo.TestUser;
-import com.example.eventcal.pojo.User;
+import com.example.eventcal.pojo.LoginUser;
 import com.example.eventcal.pojo.UserList;
+import com.example.eventcal.pojo.Event;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -17,14 +21,26 @@ public interface APIInterface {
     @GET("")
     Call<MultipleResource> doGetListResources();
 
-    @POST("user/create/")
-    Call<User> createUser(@Body User user);
+    @POST("user/login/")
+    Call<LoginUser> login(@Body LoginUser loginUser);
 
-    @POST("api/users/")
-    Call<TestUser> createTestUser(@Body TestUser user);
+    @POST("user/create/")
+    Call<CreateUser> createUser(@Body CreateUser createUser);
+
+    @POST("events/create/")
+    Call<Event> createEvent(@Body Event createEvent);
 
     @GET("users")
     Call<UserList> doGetUserList();
+
+    @GET("events/getall?")
+    Call<EventList> doGetEventList(@Query("date") String date);
+
+    @GET("events/getusers?")
+    Call<EventList> doGetUsersEvents(@Query("user") String userId);
+
+    @POST("events/saveEvent/")
+    Call<SaveEvent> saveEvent(@Body SaveEvent saveEvent);
 
     @FormUrlEncoded
     @POST("/api/users?")
