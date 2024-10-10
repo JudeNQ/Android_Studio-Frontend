@@ -12,6 +12,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.eventcal.adapters.EventAdapter
 import com.example.eventcal.pojo.CreateUser
 import com.example.eventcal.pojo.Event
 import com.example.eventcal.pojo.EventList
@@ -20,6 +23,7 @@ import com.example.eventcal.ui.theme.EventCalTheme
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
 
 class MainActivity : ComponentActivity() {
 
@@ -27,18 +31,56 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            EventCalTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+        //enableEdgeToEdge()
+
+        apiInterface = APIClient.getClient().create(APIInterface::class.java)
+
+        setContentView(R.layout.activity_home)  // Use home layout
+
+        // Create test data
+        /*val testEvents = listOf(
+            com.example.eventcal.models.Event("Event 1", LocalDateTime.now()),
+            com.example.eventcal.models.Event("Event 2", LocalDateTime.now().plusDays(1)),
+            com.example.eventcal.models.Event(
+                "Event 3",
+                LocalDateTime.now().plusDays(1).plusHours(1)
+            ),
+            com.example.eventcal.models.Event("Event 4", LocalDateTime.now().plusDays(2)),
+            com.example.eventcal.models.Event(
+                "Event 5",
+                LocalDateTime.now().plusDays(2).plusHours(1)
+            )
+        )*/
+/*
+        doGetEventList("10/10/2024"){
+
+            if(it == null) {
+            }
+            else {
+
+                var eventList : ArrayList<com.example.eventcal.models.Event> = ArrayList<com.example.eventcal.models.Event>()
+
+                for(event in it.data) {
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
+
+                    val dt = LocalDate.parse(stringDate, formatter);
+                    com.example.eventcal.models.Event(event.eventName, event.date)
                 }
             }
         }
-        apiInterface = APIClient.getClient().create(APIInterface::class.java)
+*/
+
+        // Initialize RecyclerView
+        val recyclerView = findViewById<RecyclerView>(R.id.event_recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Initialize EventAdapter FIXME
+        val adapter = EventAdapter(testEvents) { event ->
+            // Handle delete button click
+            println("Event deleted: ${event.title}")
+        }
+
+        recyclerView.adapter = adapter
         /*
         var createUser : CreateUser = CreateUser("JaneSchmane@gmail.com", "password")
         createUser(createUser) {
@@ -187,21 +229,5 @@ class MainActivity : ComponentActivity() {
                 onResult(null)
             }
         })
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    EventCalTheme {
-        Greeting("Android")
     }
 }
