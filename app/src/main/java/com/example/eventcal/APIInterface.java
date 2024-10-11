@@ -4,10 +4,9 @@ import com.example.eventcal.pojo.CreateUser;
 import com.example.eventcal.pojo.EventList;
 import com.example.eventcal.pojo.MultipleResource;
 import com.example.eventcal.pojo.SaveEvent;
-import com.example.eventcal.pojo.TestUser;
 import com.example.eventcal.pojo.LoginUser;
 import com.example.eventcal.pojo.UserList;
-import com.example.eventcal.pojo.Event;
+import com.example.eventcal.pojo.ServerEvent;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -28,7 +27,7 @@ public interface APIInterface {
     Call<CreateUser> createUser(@Body CreateUser createUser);
 
     @POST("events/create/")
-    Call<Event> createEvent(@Body Event createEvent);
+    Call<ServerEvent> createEvent(@Body ServerEvent createServerEvent);
 
     @GET("users")
     Call<UserList> doGetUserList();

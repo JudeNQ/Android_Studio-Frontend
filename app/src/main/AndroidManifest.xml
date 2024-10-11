@@ -20,7 +20,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:theme="@style/Theme.EventCal">
+        </activity>
+
+        <activity
+            android:name=".pages.login.LoginPage"
+            android:exported="true"
             android:theme="@style/Theme.EventCal">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,12 +33,7 @@
             </intent-filter>
         </activity>
 
-        <!-- HomeTestActivity -->
-        <activity
-            android:name=".HomeTestActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:exported="true"
-            android:label="Home Test" />
+
 
     </application>
 

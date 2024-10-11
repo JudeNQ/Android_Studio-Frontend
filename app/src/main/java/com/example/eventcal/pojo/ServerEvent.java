@@ -2,7 +2,7 @@ package com.example.eventcal.pojo;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Event {
+public class ServerEvent {
     @SerializedName("name")
     public String eventName;
     @SerializedName("org")
@@ -23,7 +23,7 @@ public class Event {
     @SerializedName("message")
     public String message;
 
-    public Event(String name, String org, String startTime, String endTime, String date, String location, String description) {
+    public ServerEvent(String name, String org, String startTime, String endTime, String date, String location, String description) {
         this.eventName = name;
         this.organization = org;
         this.startTime = startTime;

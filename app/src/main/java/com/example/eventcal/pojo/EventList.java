@@ -18,5 +18,5 @@ public class EventList {
     @SerializedName("date")
     public String date;
     @SerializedName("data")
-    public List<Event> data = new ArrayList<>();
+    public List<ServerEvent> data = new ArrayList<>();
 }

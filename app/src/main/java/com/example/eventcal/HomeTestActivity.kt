@@ -16,11 +16,11 @@ class HomeTestActivity : AppCompatActivity() {
 
         // Create test data
         val testEvents = listOf(
-            Event("Event 1", LocalDateTime.now()),
-            Event("Event 2", LocalDateTime.now().plusDays(1)),
-            Event("Event 3", LocalDateTime.now().plusDays(1).plusHours(1)),
-            Event("Event 4", LocalDateTime.now().plusDays(2)),
-            Event("Event 5", LocalDateTime.now().plusDays(2).plusHours(1))
+            ServerEvent("ServerEvent 1", LocalDateTime.now()),
+            ServerEvent("ServerEvent 2", LocalDateTime.now().plusDays(1)),
+            ServerEvent("ServerEvent 3", LocalDateTime.now().plusDays(1).plusHours(1)),
+            ServerEvent("ServerEvent 4", LocalDateTime.now().plusDays(2)),
+            ServerEvent("ServerEvent 5", LocalDateTime.now().plusDays(2).plusHours(1))
         )
 
         // Initialize RecyclerView
@@ -30,7 +30,7 @@ class HomeTestActivity : AppCompatActivity() {
         // Initialize EventAdapter FIXME
         val adapter = EventAdapter(testEvents) { event ->
             // Handle delete button click
-            println("Event deleted: ${event.title}")
+            println("ServerEvent deleted: ${event.title}")
         }
 
         recyclerView.adapter = adapter
