@@ -11,9 +11,9 @@ public class APIClient {
     private static Retrofit retrofit = null;
 
     //You need to change baseURL to your networks ipv4 address (this is just mine)
-    private static String BASEURL = "http://192.168.1.3:8000/";
+    private static String BASEURL = "http://172.20.8.139:8000/";
 
-    static Retrofit getClient() {
+    public static Retrofit getClient() {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

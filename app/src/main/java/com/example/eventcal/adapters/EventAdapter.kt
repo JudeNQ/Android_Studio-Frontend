@@ -57,10 +57,10 @@ class EventAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_HEADER) {
-            val view = LayoutInflater.from(parent.context).inflate(R.drawable.date_header_item, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.date_header_item, parent, false)
             DateHeaderViewHolder(view)
         } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.drawable.item_event, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false)
             EventViewHolder(view)
         }
     }
