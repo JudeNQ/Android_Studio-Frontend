@@ -1,5 +1,6 @@
 package com.example.eventcal;
 
+import com.example.eventcal.pojo.CreateGroup;
 import com.example.eventcal.pojo.CreateUser;
 import com.example.eventcal.pojo.EventList;
 import com.example.eventcal.pojo.MultipleResource;
@@ -28,6 +29,9 @@ public interface APIInterface {
 
     @POST("events/create/")
     Call<ServerEvent> createEvent(@Body ServerEvent createServerEvent);
+
+    @POST("groups/create/")
+    Call<CreateGroup> createGroup(@Body CreateGroup group);
 
     @GET("users")
     Call<UserList> doGetUserList();
