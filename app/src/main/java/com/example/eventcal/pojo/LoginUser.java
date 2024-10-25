@@ -9,6 +9,8 @@ public class LoginUser {
     public String password;
     @SerializedName("confirmed")
     public String confirmed;
+    @SerializedName("id")
+    public String id;
 
     public LoginUser(String email, String password) {
         this.email = email;
