@@ -18,6 +18,7 @@ import com.example.eventcal.dataCoordinator.DataCoordinator
 import com.example.eventcal.databinding.ActivityMainBinding
 import com.example.eventcal.pojo.CreateGroup
 import com.example.eventcal.pojo.GroupList
+import com.example.eventcal.pojo.JoinGroup
 
 
 class MainActivity : AppCompatActivity() {
@@ -100,6 +101,21 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun joinGroup(groupInfo : JoinGroup, onResult : (JoinGroup?) -> Unit) {
+        var joinInfo : JoinGroup = groupInfo
+        val call = apiInterface.joinGroup(joinInfo)
+        call.enqueue(object : Callback<JoinGroup> {
+            override fun onResponse(call: Call<JoinGroup>, response: Response<JoinGroup>) {
+                val event = response.body()
+                onResult(event)
+            }
+
+            override fun onFailure(call: Call<JoinGroup>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
     //Enter date in MM/DD/YYYY format please :pray:
     public fun doGetEventList(date : String, onResult : (EventList?) -> Unit) {
         val call: Call<EventList> = apiInterface.doGetEventList(date)
@@ -117,6 +133,20 @@ class MainActivity : AppCompatActivity() {
 
     public fun doGetGroupList(userId : String, onResult : (GroupList?) -> Unit) {
         val call: Call<GroupList> = apiInterface.doGetUsersGroups(userId)
+        call.enqueue(object : Callback<GroupList> {
+            override fun onResponse(call: Call<GroupList>, response: Response<GroupList>) {
+                val eventL =response.body()
+                onResult(eventL)
+            }
+
+            override fun onFailure(call: Call<GroupList>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    public fun doGetGroupList(onResult : (GroupList?) -> Unit) {
+        val call: Call<GroupList> = apiInterface.doGetAllGroups()
         call.enqueue(object : Callback<GroupList> {
             override fun onResponse(call: Call<GroupList>, response: Response<GroupList>) {
                 val eventL =response.body()

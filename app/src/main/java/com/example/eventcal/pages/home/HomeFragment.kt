@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
                     eventList.add(
                         Event(
                             event.eventName,
-                            LocalDateTime.parse(event.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                            LocalDateTime.parse(event.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
                         )
                     )
                 }

@@ -4,5 +4,6 @@ data class Group (
     val name : String,
     val bio : String,
     val leader : String,
-    val members : List<String>
+    val members : List<String>,
+    val id : String
 )

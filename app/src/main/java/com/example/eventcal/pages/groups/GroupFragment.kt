@@ -17,7 +17,7 @@ import com.example.eventcal.adapters.GroupAdapter
 import com.example.eventcal.databinding.FragmentGroupBinding
 import com.example.eventcal.models.Group
 import com.example.eventcal.pojo.ServerGroup
-import com.example.eventcal.userStorage.UserData
+import com.example.eventcal.userStorage.UserInfo
 
 
 class GroupFragment : Fragment() {
@@ -41,7 +41,7 @@ class GroupFragment : Fragment() {
         var groupList = ArrayList<Group>()
 
         //Get the logged in users list of groups
-        mainActivity.doGetGroupList(UserData.shared.userId) {
+        mainActivity.doGetGroupList(UserInfo.info.userId) {
             if (it != null) {
                 for (group: ServerGroup in it.data) {
                     groupList.add(
@@ -49,7 +49,8 @@ class GroupFragment : Fragment() {
                             group.groupName,
                             group.bio,
                             group.leader,
-                            group.members
+                            group.members,
+                            group.groupId,
                         )
                     )
                 }
@@ -107,5 +108,9 @@ class GroupFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    public fun attemptLogin(groupId : String) {
+        //Open up a fragment and AHHHHHHHHHHHHHHHHHHHHHHHHH
     }
 }

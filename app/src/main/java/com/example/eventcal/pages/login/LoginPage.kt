@@ -17,7 +17,7 @@ import com.example.eventcal.R
 import com.example.eventcal.dataCoordinator.DataCoordinator
 import com.example.eventcal.databinding.LoginPageBinding
 import com.example.eventcal.pojo.LoginUser
-import com.example.eventcal.userStorage.UserData
+import com.example.eventcal.userStorage.UserInfo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -97,15 +97,13 @@ class LoginPage : AppCompatActivity() {
 
     fun validLogin(user : LoginUser) {
         //Store the user data
-        UserData.shared.userId = user.id
+        UserInfo.info.userId = user.id
 
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
     private fun setUpUserData() {
-        UserData.shared.initialize(
-            baseContext,
-        )
+        UserInfo.info.initialize()
     }
 }

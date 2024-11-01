@@ -14,12 +14,15 @@ public class ServerGroup {
     public String leader;
     @SerializedName("members")
     public List<String> members = new ArrayList<>();
+    @SerializedName("password")
+    public String password;
     @SerializedName("_id")
     public String groupId;
 
-    public ServerGroup(String name, String bio) {
+    public ServerGroup(String name, String bio, String password) {
         this.groupName = name;
         this.bio = bio;
+        this.password = password;
     }
 }
 
