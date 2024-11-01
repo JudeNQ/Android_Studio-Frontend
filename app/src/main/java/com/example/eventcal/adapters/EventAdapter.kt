@@ -16,7 +16,10 @@ class EventAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_HEADER = 0
-    private val TYPE_ITEM = 1
+    private val TYPE_SUMMARY = 1
+    private val TYPE_DETAILS = 2
+
+    private var expandedPosition = -1
 
     private val items: List<ListItem> = createListItems(events)
 
@@ -51,41 +54,77 @@ class EventAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
             is ListItem.DateHeader -> TYPE_HEADER
-            is ListItem.EventItem -> TYPE_ITEM
+            is ListItem.EventItem -> if (position == expandedPosition) TYPE_DETAILS else TYPE_SUMMARY
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == TYPE_HEADER) {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.date_header_item, parent, false)
-            DateHeaderViewHolder(view)
-        } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_event, parent, false)
-            EventViewHolder(view)
+        val layoutInflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            TYPE_HEADER -> {
+                val view = layoutInflater.inflate(R.layout.date_header_item, parent, false)
+                DateHeaderViewHolder(view)
+            }
+            TYPE_DETAILS -> {
+                val view = layoutInflater.inflate(R.layout.item_event_details, parent, false)
+                EventDetailsViewHolder(view)
+            }
+            else -> {
+                val view = layoutInflater.inflate(R.layout.item_event, parent, false)
+                EventSummaryViewHolder(view)
+            }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is EventViewHolder) {
-            val eventItem = items[position] as ListItem.EventItem
-            holder.titleTextView.text = eventItem.event.title
-            holder.dateTextView.text = eventItem.event.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-
-            /*holder.deleteButton.setOnClickListener {                FIXME
-                onDeleteClick(eventItem.event)
-            }*/
-        } else if (holder is DateHeaderViewHolder) {
-            val headerItem = items[position] as ListItem.DateHeader
-            holder.dateHeaderTextView.text = headerItem.date
+        when (holder) {
+            is DateHeaderViewHolder -> {
+                val headerItem = items[position] as ListItem.DateHeader
+                holder.dateHeaderTextView.text = headerItem.date
+            }
+            is EventSummaryViewHolder -> {
+                val eventItem = items[position] as ListItem.EventItem
+                holder.bind(eventItem.event) {
+                    expandedPosition = if (expandedPosition == position) RecyclerView.NO_POSITION else position
+                    notifyItemChanged(position)
+                }
+            }
+            is EventDetailsViewHolder -> {
+                val eventItem = items[position] as ListItem.EventItem
+                holder.bind(eventItem.event) {
+                    expandedPosition = RecyclerView.NO_POSITION
+                    notifyItemChanged(position)
+                }
+            }
         }
     }
 
+
+
     override fun getItemCount(): Int = items.size
 
-    class EventViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class EventSummaryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.event_title)
         val dateTextView: TextView = view.findViewById(R.id.event_time)
-        //val deleteButton: Button = view.findViewById(R.id.delete_button)  FIXME with the other delete thing in the item
+
+        fun bind(event: Event, onClick: () -> Unit) {
+            titleTextView.text = event.title
+            dateTextView.text = event.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+            itemView.setOnClickListener { onClick() }
+        }
+    }
+
+    class EventDetailsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val titleTextView: TextView = view.findViewById(R.id.event_title)
+        val dateTextView: TextView = view.findViewById(R.id.event_time)
+        val descriptionTextView: TextView = view.findViewById(R.id.event_description) // assuming there’s a description in item_event_details.xml
+
+        fun bind(event: Event, onClick: () -> Unit) {
+            titleTextView.text = event.title
+            dateTextView.text = event.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+            descriptionTextView.text = event.description // Assuming Event has a `description` property
+            itemView.setOnClickListener { onClick() }
+        }
     }
 
     class DateHeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {

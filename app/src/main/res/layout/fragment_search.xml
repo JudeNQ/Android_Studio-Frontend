@@ -9,19 +9,6 @@
     android:rotationX="0" >
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-
         <!-- TODO: Change logo or something? border looks wonky-->
     <ImageView
         android:id="@+id/imageViewSearch"
@@ -30,6 +17,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/ic_search"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,10 +31,10 @@
         android:hint="@string/title_search"
         android:inputType="text"
         android:paddingStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/toolbar_search"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar_search"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayoutSearchOptions"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageViewSearch"
-        app:layout_constraintTop_toTopOf="@+id/toolbar_search" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayoutSearchOptions"
@@ -66,10 +54,6 @@
             android:layout_height="wrap_content"
             android:text="Events" />
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="People" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.recyclerview.widget.RecyclerView

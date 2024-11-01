@@ -45,7 +45,8 @@ class HomeFragment : Fragment() {
                     eventList.add(
                         Event(
                             event.eventName,
-                            LocalDateTime.parse(event.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                            LocalDateTime.parse(event.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                            event.description
                         )
                     )
                 }
@@ -54,10 +55,8 @@ class HomeFragment : Fragment() {
                 val recyclerView = root.findViewById<RecyclerView>(R.id.event_recycler_view)
                 recyclerView.layoutManager = LinearLayoutManager(root.context)
 
-                // Initialize EventAdapter FIXME
+                // Initialize EventAdapter
                 val adapter = EventAdapter(eventList) { event ->
-                    // Handle delete button click
-                    println("ServerEvent deleted: ${event.title}")
                 }
 
                 recyclerView.adapter = adapter
