@@ -1,5 +1,6 @@
 package com.example.eventcal.pages.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -8,19 +9,21 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.eventcal.APIClient
 import com.example.eventcal.APIInterface
-import com.example.eventcal.ApiClient
 import com.example.eventcal.MainActivity
 import com.example.eventcal.R
 import com.example.eventcal.databinding.LoginPageBinding
 import com.example.eventcal.pojo.LoginUser
+import com.example.eventcal.userStorage.UserInfo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 lateinit var apiInterface : APIInterface
 
 class LoginPage : AppCompatActivity() {
     lateinit var binding: LoginPageBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,6 +32,9 @@ class LoginPage : AppCompatActivity() {
 
         apiInterface = APIClient.getClient().create(APIInterface::class.java)
         val button = findViewById<Button>(R.id.login_button)
+
+        //Set up the userData
+        setUpUserData()
 
         button.setOnClickListener {
             //Get the text from the text fields
@@ -40,7 +46,7 @@ class LoginPage : AppCompatActivity() {
                 if (it != null) {
                     //The attempt worked
                     if(it.confirmed == "True") {
-                        validLogin()
+                        validLogin(it)
                     }
                     else {
                         //Display toast message saying incorrect information
@@ -84,8 +90,15 @@ class LoginPage : AppCompatActivity() {
         })
     }
 
-    fun validLogin() {
+    fun validLogin(user : LoginUser) {
+        //Store the user data
+        UserInfo.getInstance().userId = user.id
+
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun setUpUserData() {
+        UserInfo.getInstance()
     }
 }
