@@ -11,17 +11,15 @@ import com.example.eventcal.models.Event
 import java.time.format.DateTimeFormatter
 
 class EventAdapter(
-    private val events: List<Event>,
+    private val allEvents: List<Event>,
     private val onDeleteClick: (Event) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var items: List<ListItem> = createListItems(allEvents)
     private val TYPE_HEADER = 0
     private val TYPE_SUMMARY = 1
     private val TYPE_DETAILS = 2
-
     private var expandedPosition = -1
-
-    private val items: List<ListItem> = createListItems(events)
 
     // Define ListItem sealed class here
     sealed class ListItem {
@@ -30,26 +28,27 @@ class EventAdapter(
     }
 
     private fun createListItems(events: List<Event>): List<ListItem> {
-        val eventsByDate: MutableMap<String, MutableList<Event>> = mutableMapOf()
-
-        // Group events by date
-        for (event in events) {
-            val date = event.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            eventsByDate.getOrPut(date) { mutableListOf() }.add(event)
-        }
-
+        val eventsByDate = events.groupBy { it.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) }
         val listItems = mutableListOf<ListItem>()
 
-        // Populate the final list with headers and events
         for ((date, eventsList) in eventsByDate) {
-            listItems.add(ListItem.DateHeader(date)) // Add the date header
-            for (event in eventsList) {
-                listItems.add(ListItem.EventItem(event)) // Add each event
-            }
+            listItems.add(ListItem.DateHeader(date)) // Add date header
+            eventsList.forEach { listItems.add(ListItem.EventItem(it)) } // Add each event
         }
 
         return listItems
     }
+
+    fun filter(query:String){
+        val filteredEvents = if (query.isBlank()){
+            allEvents
+        } else{
+            allEvents.filter{it.title.contains(query,ignoreCase = true)}
+        }
+        items = createListItems(filteredEvents)
+        notifyDataSetChanged()
+    }
+
 
     override fun getItemViewType(position: Int): Int {
         return when (items[position]) {
@@ -98,7 +97,6 @@ class EventAdapter(
             }
         }
     }
-
 
 
     override fun getItemCount(): Int = items.size
