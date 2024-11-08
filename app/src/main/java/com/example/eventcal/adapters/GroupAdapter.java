@@ -29,9 +29,15 @@ import kotlin.jvm.internal.markers.KMutableList;
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
 
     private List<Group> groupList;
+    private GroupActionListener groupActionListener;
 
-    public GroupAdapter(List<Group> groupList) {
+    public interface GroupActionListener {
+        void onJoinGroup(String groupId);
+    }
+
+    public GroupAdapter(List<Group> groupList, GroupActionListener listener) {
         this.groupList = groupList;
+        this.groupActionListener = listener;
     }
 
     @NonNull
@@ -48,7 +54,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         holder.groupBio.setText(group.getBio());
 
         //Set button to either join or dropdown depending on if the user is in the group
-        if(UserInfo.info.groups.contains(group.getId())) {
+        if(UserInfo.getInstance().groups.contains(group.getId())) {
             //Set the more info to visible and join to invisible
             holder.moreInfoButton.setVisibility(View.VISIBLE);
             holder.joinButton.setVisibility(View.GONE);
@@ -62,16 +68,20 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         holder.moreInfoButton.setOnClickListener(v -> {
             if (holder.moreInfoLayout.getVisibility() == View.GONE) {
                 holder.moreInfoLayout.setVisibility(View.VISIBLE); // Show info
+                //Change the icon for the button?
+                holder.moreInfoButton.setImageResource(R.drawable.arrow_dropdown_up);
             } else {
                 holder.moreInfoLayout.setVisibility(View.GONE); // Hide info
+                holder.moreInfoButton.setImageResource(R.drawable.arrow_dropdown_down);
             }
         });
 
         //Handle the user trying to join a certain group
         // Toggle visibility of the more info layout
         holder.joinButton.setOnClickListener(v -> {
-            //Open a popup to join the group
-
+            if (groupActionListener != null) {
+                groupActionListener.onJoinGroup(group.getId());
+            }
         });
     }
 
@@ -95,33 +105,5 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             moreInfoLayout = itemView.findViewById(R.id.more_info_layout);
             groupBio = itemView.findViewById(R.id.group_info);
         }
-    }
-}
-class JoinGroupDialogFragment extends DialogFragment {
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        //Make a nice little alert dialogue
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater.
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        // Inflate and set the layout for the dialog.
-        // Pass null as the parent view because it's going in the dialog layout.
-        builder.setView(inflater.inflate(R.layout.dialog_joingroup, null))
-                // Add action buttons
-                .setTitle("Join Group")
-                .setPositiveButton("Join Group", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Sign in the user.
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        JoinGroupDialogFragment.this.getDialog().cancel();
-                    }
-                });
-        return builder.create();
     }
 }

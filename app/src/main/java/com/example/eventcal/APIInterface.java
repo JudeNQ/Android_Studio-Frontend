@@ -8,6 +8,7 @@ import com.example.eventcal.pojo.JoinGroup;
 import com.example.eventcal.pojo.MultipleResource;
 import com.example.eventcal.pojo.SaveEvent;
 import com.example.eventcal.pojo.LoginUser;
+import com.example.eventcal.pojo.ServerGroup;
 import com.example.eventcal.pojo.UserList;
 import com.example.eventcal.pojo.ServerEvent;
 
@@ -33,7 +34,7 @@ public interface APIInterface {
     Call<ServerEvent> createEvent(@Body ServerEvent createServerEvent);
 
     @POST("groups/create/")
-    Call<CreateGroup> createGroup(@Body CreateGroup group);
+    Call<ServerGroup> createGroup(@Body ServerGroup group);
 
     @POST("groups/join/")
     Call<JoinGroup> joinGroup(@Body JoinGroup group);
@@ -44,13 +45,13 @@ public interface APIInterface {
     @GET("events/getall?")
     Call<EventList> doGetEventList(@Query("date") String date);
 
-    @GET("events/getGroups")
+    @GET("groups/getGroups")
     Call<GroupList> doGetAllGroups();
 
     @GET("events/getusers?")
     Call<EventList> doGetUsersEvents(@Query("user") String userId);
 
-    @GET("events/getGroups?")
+    @GET("groups/getGroups?")
     Call<GroupList> doGetUsersGroups(@Query("user") String userId);
 
     @POST("events/saveEvent/")

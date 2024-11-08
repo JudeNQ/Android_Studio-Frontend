@@ -7,14 +7,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import com.example.eventcal.APIClient
 import com.example.eventcal.APIInterface
 import com.example.eventcal.MainActivity
 import com.example.eventcal.R
-import com.example.eventcal.dataCoordinator.DataCoordinator
 import com.example.eventcal.databinding.LoginPageBinding
 import com.example.eventcal.pojo.LoginUser
 import com.example.eventcal.userStorage.UserInfo
@@ -26,7 +22,6 @@ import retrofit2.Response
 lateinit var apiInterface : APIInterface
 
 class LoginPage : AppCompatActivity() {
-    val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
     lateinit var binding: LoginPageBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,13 +92,13 @@ class LoginPage : AppCompatActivity() {
 
     fun validLogin(user : LoginUser) {
         //Store the user data
-        UserInfo.info.userId = user.id
+        UserInfo.getInstance().userId = user.id
 
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
     private fun setUpUserData() {
-        UserInfo.info.initialize()
+        UserInfo.getInstance()
     }
 }

@@ -11,7 +11,7 @@ public class APIClient {
     private static Retrofit retrofit = null;
 
     //You need to change baseURL to your networks ipv4 address (this is just mine)
-    private static String BASEURL = "http://192.168.247.130:8000/";
+    private static String BASEURL = "http://172.20.8.139:8000/";
 
     public static Retrofit getClient() {
 

@@ -14,11 +14,11 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.eventcal.dataCoordinator.DataCoordinator
 import com.example.eventcal.databinding.ActivityMainBinding
 import com.example.eventcal.pojo.CreateGroup
 import com.example.eventcal.pojo.GroupList
 import com.example.eventcal.pojo.JoinGroup
+import com.example.eventcal.pojo.ServerGroup
 
 
 class MainActivity : AppCompatActivity() {
@@ -85,23 +85,23 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun createGroup(groupInfo : CreateGroup, onResult : (CreateGroup?) -> Unit) {
-        var createGroup : CreateGroup = groupInfo
+    public fun createGroup(groupInfo : ServerGroup, onResult : (ServerGroup?) -> Unit) {
+        var createGroup : ServerGroup = groupInfo
         val call = apiInterface.createGroup(createGroup)
-        call.enqueue(object : Callback<CreateGroup> {
-            override fun onResponse(call: Call<CreateGroup>, response: Response<CreateGroup>) {
+        call.enqueue(object : Callback<ServerGroup> {
+            override fun onResponse(call: Call<ServerGroup>, response: Response<ServerGroup>) {
                 val event = response.body()
                 //Check to see the returned User Data is valid?
                 onResult(event)
             }
 
-            override fun onFailure(call: Call<CreateGroup>, t: Throwable) {
+            override fun onFailure(call: Call<ServerGroup>, t: Throwable) {
                 onResult(null)
             }
         })
     }
 
-    private fun joinGroup(groupInfo : JoinGroup, onResult : (JoinGroup?) -> Unit) {
+    public fun JoinGroup(groupInfo : JoinGroup, onResult : (JoinGroup?) -> Unit) {
         var joinInfo : JoinGroup = groupInfo
         val call = apiInterface.joinGroup(joinInfo)
         call.enqueue(object : Callback<JoinGroup> {
