@@ -1,10 +1,14 @@
 package com.example.eventcal;
 
+import com.example.eventcal.pojo.CreateGroup;
 import com.example.eventcal.pojo.CreateUser;
 import com.example.eventcal.pojo.EventList;
+import com.example.eventcal.pojo.GroupList;
+import com.example.eventcal.pojo.JoinGroup;
 import com.example.eventcal.pojo.MultipleResource;
 import com.example.eventcal.pojo.SaveEvent;
 import com.example.eventcal.pojo.LoginUser;
+import com.example.eventcal.pojo.ServerGroup;
 import com.example.eventcal.pojo.UserList;
 import com.example.eventcal.pojo.ServerEvent;
 
@@ -29,14 +33,26 @@ public interface APIInterface {
     @POST("events/create/")
     Call<ServerEvent> createEvent(@Body ServerEvent createServerEvent);
 
+    @POST("groups/create/")
+    Call<ServerGroup> createGroup(@Body ServerGroup group);
+
+    @POST("groups/join/")
+    Call<JoinGroup> joinGroup(@Body JoinGroup group);
+
     @GET("users")
     Call<UserList> doGetUserList();
 
     @GET("events/getall?")
     Call<EventList> doGetEventList(@Query("date") String date);
 
+    @GET("groups/getGroups")
+    Call<GroupList> doGetAllGroups();
+
     @GET("events/getusers?")
     Call<EventList> doGetUsersEvents(@Query("user") String userId);
+
+    @GET("groups/getGroups?")
+    Call<GroupList> doGetUsersGroups(@Query("user") String userId);
 
     @POST("events/saveEvent/")
     Call<SaveEvent> saveEvent(@Body SaveEvent saveEvent);

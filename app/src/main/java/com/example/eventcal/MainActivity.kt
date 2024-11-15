@@ -15,6 +15,10 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.eventcal.databinding.ActivityMainBinding
+import com.example.eventcal.pojo.CreateGroup
+import com.example.eventcal.pojo.GroupList
+import com.example.eventcal.pojo.JoinGroup
+import com.example.eventcal.pojo.ServerGroup
 
 
 class MainActivity : AppCompatActivity() {
@@ -38,12 +42,11 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_search, R.id.navigation_calendar, R.id.navigation_profile
+                R.id.navigation_home, R.id.navigation_group, R.id.navigation_calendar, R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
     }
 
     //Attempts to create a user with the given userInfo.
@@ -82,6 +85,37 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    public fun createGroup(groupInfo : ServerGroup, onResult : (ServerGroup?) -> Unit) {
+        var createGroup : ServerGroup = groupInfo
+        val call = apiInterface.createGroup(createGroup)
+        call.enqueue(object : Callback<ServerGroup> {
+            override fun onResponse(call: Call<ServerGroup>, response: Response<ServerGroup>) {
+                val event = response.body()
+                //Check to see the returned User Data is valid?
+                onResult(event)
+            }
+
+            override fun onFailure(call: Call<ServerGroup>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    public fun JoinGroup(groupInfo : JoinGroup, onResult : (JoinGroup?) -> Unit) {
+        var joinInfo : JoinGroup = groupInfo
+        val call = apiInterface.joinGroup(joinInfo)
+        call.enqueue(object : Callback<JoinGroup> {
+            override fun onResponse(call: Call<JoinGroup>, response: Response<JoinGroup>) {
+                val event = response.body()
+                onResult(event)
+            }
+
+            override fun onFailure(call: Call<JoinGroup>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
     //Enter date in MM/DD/YYYY format please :pray:
     public fun doGetEventList(date : String, onResult : (EventList?) -> Unit) {
         val call: Call<EventList> = apiInterface.doGetEventList(date)
@@ -92,6 +126,34 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<EventList>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    public fun doGetGroupList(userId : String, onResult : (GroupList?) -> Unit) {
+        val call: Call<GroupList> = apiInterface.doGetUsersGroups(userId)
+        call.enqueue(object : Callback<GroupList> {
+            override fun onResponse(call: Call<GroupList>, response: Response<GroupList>) {
+                val eventL =response.body()
+                onResult(eventL)
+            }
+
+            override fun onFailure(call: Call<GroupList>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    public fun doGetGroupList(onResult : (GroupList?) -> Unit) {
+        val call: Call<GroupList> = apiInterface.doGetAllGroups()
+        call.enqueue(object : Callback<GroupList> {
+            override fun onResponse(call: Call<GroupList>, response: Response<GroupList>) {
+                val eventL =response.body()
+                onResult(eventL)
+            }
+
+            override fun onFailure(call: Call<GroupList>, t: Throwable) {
                 onResult(null)
             }
         })
