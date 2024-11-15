@@ -35,18 +35,54 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         //val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val navController : NavController = navHostFragment.navController
+        val navController: NavController = navHostFragment.navController
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_group, R.id.navigation_calendar, R.id.navigation_profile
+                R.id.navigation_home,
+                R.id.navigation_group,
+                R.id.navigation_calendar,
+                R.id.navigation_profile
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        //Set up nav bar so the schedule screen works properly >:(
+        navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_group -> {
+                    //When selecting the group tab, pop ScheduleFragment if it’s on the back stack
+                    if (navController.currentDestination?.id == R.id.scheduleFragment) {
+                        navController.popBackStack(R.id.navigation_group, false)
+                    }
+                    navController.navigate(R.id.navigation_group)
+                    true
+                }
+
+                R.id.navigation_home -> {
+                    navController.navigate(R.id.navigation_home)
+                    true
+                }
+
+                R.id.navigation_calendar -> {
+                    navController.navigate(R.id.navigation_calendar)
+                    true
+                }
+
+                R.id.navigation_profile -> {
+                    navController.navigate(R.id.navigation_profile)
+                    true
+                }
+
+                else -> false
+            }
+        }
+
     }
 
     //Attempts to create a user with the given userInfo.
