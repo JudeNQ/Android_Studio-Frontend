@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter
 
 class EventAdapter(
     private val allEvents: List<Event>,
+    private val showSavedOnly: Boolean,
     private val onDeleteClick: (Event) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -44,6 +45,12 @@ class EventAdapter(
             allEvents
         } else{
             allEvents.filter{it.title.contains(query,ignoreCase = true)}
+        }
+        //TODO Filter for saved events if showSavedOnly is true
+        val eventsToShow = if (showSavedOnly) {
+            filteredEvents.filter { } // Not sure here how the get function works :/ but it will need the filtering based on if an event is saved applied here
+        } else {
+            filteredEvents
         }
         items = createListItems(filteredEvents)
         notifyDataSetChanged()
@@ -94,6 +101,10 @@ class EventAdapter(
                     expandedPosition = RecyclerView.NO_POSITION
                     notifyItemChanged(position)
                 }
+                // Handle the Save button click
+                holder.saveButton.setOnClickListener {
+                    //TODO saveEvent(userid, event)
+                    }
             }
         }
     }
@@ -115,12 +126,13 @@ class EventAdapter(
     class EventDetailsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTextView: TextView = view.findViewById(R.id.event_title)
         val dateTextView: TextView = view.findViewById(R.id.event_time)
-        val descriptionTextView: TextView = view.findViewById(R.id.event_description) // assuming there’s a description in item_event_details.xml
+        val descriptionTextView: TextView = view.findViewById(R.id.event_description)
+        val saveButton: Button = itemView.findViewById(R.id.save_button)
 
         fun bind(event: Event, onClick: () -> Unit) {
             titleTextView.text = event.title
             dateTextView.text = event.dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-            descriptionTextView.text = event.description // Assuming Event has a `description` property
+            descriptionTextView.text = event.description
             itemView.setOnClickListener { onClick() }
         }
     }
