@@ -6,11 +6,11 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/group_recycler_view"
+        android:id="@+id/schedule_recycler_view"
         android:layout_width="408dp"
         android:layout_height="611dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
-        android:text="My Groups"
+        android:text="My Schedules"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
         android:layout_marginTop="44dp"
         android:layout_marginEnd="28dp"
         android:background="@color/green"
-        android:contentDescription="Add or join an event button"
+        android:contentDescription="Create a schedule button"
         android:scaleType="center"
         app:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
