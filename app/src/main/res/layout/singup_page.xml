@@ -16,69 +16,62 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageView"
             android:layout_width="160dp"
             android:layout_height="160dp"
-            android:src="@drawable/img" />
+            android:src="@drawable/img"/>
 
-        <!-- Email EditText -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Create your account"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize=".2in"/>
+
         <EditText
-            android:id="@+id/email_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:ems="10"
-            android:hint="UNT email address"
-            android:inputType="textEmailAddress"
+            android:hint="Name"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:background="@drawable/rounded_corner"
-            android:padding="18dp" />
+            android:padding="18dp"/>
 
-        <!-- Password EditText -->
         <EditText
-            android:id="@+id/password_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:ems="10"
+            android:hint=" Email"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="20sp"
+            android:background="@drawable/rounded_corner"
+            android:padding="18dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:hint="Password"
-            android:inputType="textPassword"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:background="@drawable/rounded_corner"
-            android:padding="18dp" />
+            android:padding="18dp"/>
 
-        <!-- Login Button -->
         <Button
-            android:id="@+id/login_button"
-            style="@style/Theme.EventCal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="Continue"
             android:backgroundTint="@color/white"
-            android:textColor="@color/black"
+            android:textColor="#00853E"
             android:padding="18dp"
             android:layout_marginTop="32dp"
-            android:textSize="20sp" />
-
-        <!-- Sign Up Link -->
-        <TextView
-            android:id="@+id/signup_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Don't have an account? Sign up here"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:clickable="true"
-            android:onClick="goToSignUp" />
+            android:textSize="20sp"/>
 
     </LinearLayout>
-
 </RelativeLayout>
