@@ -30,6 +30,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
 
+        val isTestingMode = true // Set this to true only for testing
+
+        if (isTestingMode) {
+            // Directly access the NavController and navigate to the profile page
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+            val navController = navHostFragment.navController
+            navController.navigate(R.id.navigation_profile) // Replace with actual profile page ID if different
+            return // Skip the rest of the code if testing
+        }
+
         apiInterface = APIClient.getClient().create(APIInterface::class.java)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

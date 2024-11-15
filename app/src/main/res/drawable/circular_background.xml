@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#008000" /> <!-- UNT green color -->
+    <corners android:radius="250dp" />  <!-- Makes the background circular -->
+</shape>
