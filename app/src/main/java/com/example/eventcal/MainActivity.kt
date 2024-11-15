@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
 
-        val isTestingMode = true // Set this to true only for testing
+        val isTestingMode = false // Set this to true only for testing
 
         if (isTestingMode) {
             // Directly access the NavController and navigate to the profile page
