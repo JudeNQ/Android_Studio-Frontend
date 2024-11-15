@@ -12,7 +12,11 @@
     <fragment
         android:id="@+id/navigation_group"
         android:name="com.example.eventcal.pages.groups.GroupFragment"
-        android:label="Groups" />
+        android:label="Groups">
+        <action
+            android:id="@+id/action_navigation_group_to_scheduleFragment"
+            app:destination="@id/scheduleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_calendar"
         android:name="com.example.eventcal.pages.calendar.CalendarFragment"
@@ -23,4 +27,9 @@
         android:name="com.example.eventcal.pages.profile.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.example.eventcal.pages.schedule.ScheduleFragment"
+        android:label="Schedule" />
 </navigation>

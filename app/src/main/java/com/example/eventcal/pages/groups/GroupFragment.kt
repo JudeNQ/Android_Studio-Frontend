@@ -19,6 +19,7 @@ import androidx.collection.emptyLongSet
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.eventcal.MainActivity
@@ -26,6 +27,7 @@ import com.example.eventcal.R
 import com.example.eventcal.adapters.GroupAdapter
 import com.example.eventcal.databinding.FragmentGroupBinding
 import com.example.eventcal.models.Group
+import com.example.eventcal.pages.schedule.ScheduleFragment
 import com.example.eventcal.pojo.CreateGroup
 import com.example.eventcal.pojo.JoinGroup
 import com.example.eventcal.pojo.ServerGroup
@@ -75,11 +77,7 @@ class GroupFragment : Fragment(), GroupAdapter.GroupActionListener {
                     when(menuItem.title) {
                         "Create Group" -> showCreateDialog()
                             //Display more of a popup to create a group
-                        "Join Group" -> Toast.makeText(
-                            root.context,
-                            "You Clicked to make a join a group BOOOOOOOO",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        "Add Schedule" -> showAddScheduleDialog()
                             //Display more of a popup to join a group
                     }
 
@@ -214,6 +212,11 @@ class GroupFragment : Fragment(), GroupAdapter.GroupActionListener {
     fun showCreateDialog() {
         val dialog = CreateGroupDialogFragment()
         dialog.show(parentFragmentManager, "CreateGroupDialog")
+    }
+
+    fun showAddScheduleDialog() {
+        val navController = mainActivity.findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.action_navigation_group_to_scheduleFragment)
     }
 }
 
