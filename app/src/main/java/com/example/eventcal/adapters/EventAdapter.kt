@@ -1,16 +1,23 @@
 package com.example.eventcal.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.eventcal.MainActivity
 import com.example.eventcal.R
 import com.example.eventcal.models.Event
+import com.example.eventcal.pojo.SaveEvent
+import com.example.eventcal.userStorage.UserInfo
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class EventAdapter(
+    private val context : Context,
     private val allEvents: List<Event>,
     private val showSavedOnly: Boolean,
     private val onDeleteClick: (Event) -> Unit
@@ -41,14 +48,29 @@ class EventAdapter(
     }
 
     fun filter(query:String){
-        val filteredEvents = if (query.isBlank()){
+        var filteredEvents = if (query.isBlank()){
             allEvents
         } else{
             allEvents.filter{it.title.contains(query,ignoreCase = true)}
         }
-        //TODO Filter for saved events if showSavedOnly is true
+
         val eventsToShow = if (showSavedOnly) {
-            filteredEvents.filter { } // Not sure here how the get function works :/ but it will need the filtering based on if an event is saved applied here
+            val mainActivity = context as? MainActivity
+            mainActivity?.GetUsersEvents(UserInfo.getInstance().userId) {
+                if(it != null) run {
+                    var tempList : ArrayList<Event> = ArrayList()
+                    for (event in it.data) {
+                        tempList.add(Event(
+                            event.eventName,
+                            LocalDateTime.parse(event.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                            event.description,
+                            event.eventId))
+                    }
+                    filteredEvents = tempList
+                }
+            }
+            filteredEvents
+            //Get the saved events from the server
         } else {
             filteredEvents
         }
@@ -103,8 +125,30 @@ class EventAdapter(
                 }
                 // Handle the Save button click
                 holder.saveButton.setOnClickListener {
-                    //TODO saveEvent(userid, event)
+                    val mainActivity = context as? MainActivity
+                    val saveEvent = SaveEvent(UserInfo.getInstance().userId, eventItem.event.id)
+                    mainActivity?.saveEvent(saveEvent) {
+                        if (it != null) run {
+                            //Just give a toast message?
+                            if(it.message == "Event added successfully") {
+                                //Nice positive toast
+                                Toast.makeText(
+                                    context,
+                                    "Saved event successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            else {
+                                //Negative toast
+                                Toast.makeText(
+                                    context,
+                                    "Failed to save event",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                     }
+                }
             }
         }
     }

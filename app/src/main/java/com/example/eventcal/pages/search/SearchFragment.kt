@@ -28,6 +28,7 @@ class SearchFragment : Fragment() {
     private var _binding : FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var eventAdapter: EventAdapter
+    private lateinit var recyclerView: RecyclerView
     private var allEvents: List<Event> = listOf()
 
     override fun onCreateView(
@@ -42,6 +43,10 @@ class SearchFragment : Fragment() {
         //TODO test Search Filters -apply changes to home page and make home page saved events only, add organization functionality
         //TODO also need to add a way to get to this search fragment from the home page. Probably from clicking the search icon, then back thru the back button
         //TODO Save button stuff
+
+        recyclerView = root.findViewById<RecyclerView>(com.example.eventcal.R.id.event_recycler_view)
+        // Initialize RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
 
         // TODO Tab selection listener
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -61,6 +66,8 @@ class SearchFragment : Fragment() {
         })
 
         //TODO need to fix this, not sure how orgs are stored but this should be similar to dogeteventlist below
+        //Orgs are not stored, that was your job.
+        /*
         mainActivity.doGetOrganizationList { response ->
             if (response != null) {
                 allOrganizations = response.data.map { serverOrganization ->
@@ -68,6 +75,7 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+         */
 
 
         mainActivity.doGetEventList("10/11/2024") { response ->
@@ -76,20 +84,20 @@ class SearchFragment : Fragment() {
                     Event(
                         serverEvent.eventName,
                         LocalDateTime.parse(serverEvent.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                        serverEvent.description
+                        serverEvent.description,
+                        serverEvent.eventId
                     )
                 }
                 // Initialize RecyclerView
-                val recyclerView = root.findViewById<RecyclerView>(R.id.event_recycler_view)
-                recyclerView.layoutManager = LinearLayoutManager(root.context)
 
                 // Initialize EventAdapter
-                eventAdapter = EventAdapter(allEvents, showSavedOnly = false) { event -> }
+                eventAdapter = EventAdapter(requireContext(), allEvents, showSavedOnly = false) { event -> }
                 recyclerView.adapter = eventAdapter
             }
         }
 
         //TODO Implement Clicking the back button to return to the home fragment, not sure how to do it
+        //I also have no idea, so it won't happen
         binding.backButton.setOnClickListener {
             // Code to return to home fragment
         }
@@ -102,7 +110,7 @@ class SearchFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int){
                 val searchText = s.toString().lowercase()
                 eventAdapter.filter(searchText)
-                organizationAdapter.filter(searchText)
+                //organizationAdapter.filter(searchText)
             }
         })
 
@@ -117,9 +125,9 @@ class SearchFragment : Fragment() {
 
     private fun setupEventRecyclerView() {
         // Initialize RecyclerView for events
-        val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(_binding?.root?.context)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        eventAdapter = EventAdapter(allEvents, showSavedOnly = false) { event ->
+        eventAdapter = EventAdapter(requireContext(), allEvents, showSavedOnly = false) { event ->
         }
         recyclerView.adapter = eventAdapter
     }

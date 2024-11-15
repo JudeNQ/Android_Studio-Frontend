@@ -47,7 +47,8 @@ class HomeFragment : Fragment() {
                         Event(
                             event.eventName,
                             LocalDateTime.parse(event.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                            event.description
+                            event.description,
+                            event.eventId
                         )
                     )
                 }
@@ -56,7 +57,7 @@ class HomeFragment : Fragment() {
                 recyclerView.layoutManager = LinearLayoutManager(root.context)
 
                 // Initialize EventAdapter
-                eventAdapter = EventAdapter(eventList, showSavedOnly = true) { event -> }
+                eventAdapter = EventAdapter(requireContext(), eventList, showSavedOnly = true) { event -> }
                 recyclerView.adapter = eventAdapter
                 eventAdapter.notifyDataSetChanged()
             }
