@@ -1,12 +1,13 @@
-package com.example.eventcal;
+package com.example.eventcal.pages.profile;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
+
+import com.example.eventcal.R;
 
 public class SettingsActivity extends Activity {
 

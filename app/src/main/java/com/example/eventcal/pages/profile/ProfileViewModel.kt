@@ -6,25 +6,18 @@ import androidx.lifecycle.ViewModel
 
 class ProfileViewModel : ViewModel() {
 
-    private val _username = MutableLiveData<String>().apply {
-        value = "Your Username"
-    }
-    val username: LiveData<String> = _username
+    private val _username = MutableLiveData<String>()
+    val username: LiveData<String> get() = _username
 
-    private val _biography = MutableLiveData<String>().apply {
-        value = ""
-    }
-    val biography: LiveData<String> = _biography
+    private val _biography = MutableLiveData<String>()
+    val biography: LiveData<String> get() = _biography
 
-    private val _eventsCount = MutableLiveData<Int>().apply {
-        value = 0
-    }
-    val eventsCount: LiveData<Int> = _eventsCount
+    private val _eventsCount = MutableLiveData<Int>()
+    val eventsCount: LiveData<Int> get() = _eventsCount
 
-    private val _organizationsCount = MutableLiveData<Int>().apply {
-        value = 0
-    }
-    val organizationsCount: LiveData<Int> = _organizationsCount
+    private val _organizationsCount = MutableLiveData<Int>()
+    val organizationsCount: LiveData<Int> get() = _organizationsCount
+
 
     fun updateBiography(bio: String) {
         _biography.value = bio

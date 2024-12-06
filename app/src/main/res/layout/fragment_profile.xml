@@ -121,44 +121,60 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="start">
+                android:layout_height="311dp"
+                android:gravity="start"
+                android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/share_profile_button"
+                    android:id="@+id/btn_share_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:backgroundTint="#008000"
+                    android:contentDescription="@string/share_profile_description"
                     android:drawableStart="@drawable/ic_share"
                     android:drawablePadding="8dp"
                     android:text="@string/share_profile"
-                    android:textColor="#FFFFFF"
-                    android:contentDescription="@string/share_profile_description" />
+                    android:textColor="#FFFFFF" />
 
                 <Button
-                    android:id="@+id/edit_profile_button"
+                    android:id="@+id/btn_edit_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:backgroundTint="#008000"
+                    android:contentDescription="@string/edit_profile_description"
                     android:drawableStart="@drawable/ic_edit"
                     android:drawablePadding="8dp"
                     android:text="@string/edit_profile"
-                    android:textColor="#FFFFFF"
-                    android:contentDescription="@string/edit_profile_description" />
+                    android:textColor="#FFFFFF" />
 
                 <Button
-                    android:id="@+id/settings_button"
+                    android:id="@+id/btn_settings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#008000"
+                    android:contentDescription="@string/settings_description"
                     android:drawableStart="@drawable/ic_settings"
                     android:drawablePadding="8dp"
                     android:text="@string/settings"
-                    android:textColor="#FFFFFF"
-                    android:contentDescription="@string/settings_description" />
+                    android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/btn_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="@string/logout_button_text"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#008000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+
             </LinearLayout>
 
         </LinearLayout>

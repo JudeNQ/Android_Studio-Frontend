@@ -11,6 +11,7 @@ import com.example.eventcal.pojo.LoginUser;
 import com.example.eventcal.pojo.ServerGroup;
 import com.example.eventcal.pojo.UserList;
 import com.example.eventcal.pojo.ServerEvent;
+import com.example.eventcal.pojo.ProfileResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -19,6 +20,8 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.Path;
+
 
 public interface APIInterface {
     @GET("")
@@ -60,4 +63,7 @@ public interface APIInterface {
     @FormUrlEncoded
     @POST("/api/users?")
     Call<UserList> doCreateUserWithField(@Field("name") String name, @Field("job") String job);
+
+    @GET("user/profile/{userId}")
+    Call<ProfileResponse> getProfile(@Path("userId") String userId);
 }

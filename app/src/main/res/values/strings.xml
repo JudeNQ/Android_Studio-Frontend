@@ -34,5 +34,6 @@
     <string name="error_fill_fields">Please fill in both fields</string>
     <string name="error_password_length">Password must be at least 8 characters long</string>
     <string name="password_changed">Password changed successfully</string>
+    <string name="logout_button_text">Logout</string>
 
 </resources>
