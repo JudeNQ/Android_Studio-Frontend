@@ -15,7 +15,7 @@ import com.example.eventcal.pojo.SaveEvent
 import com.example.eventcal.userStorage.UserInfo
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
+//TODO If empty, prompt the user to either create or join an event
 class EventAdapter(
     private val context : Context,
     private val allEvents: List<Event>,
