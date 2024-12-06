@@ -86,7 +86,7 @@ class SearchFragment : Fragment() {
                     Event(
                         serverEvent.eventName,
                         LocalDateTime.parse(serverEvent.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                        serverEvent.description,
+                        serverEvent.bio,
                         serverEvent.eventId
                     )
                 }

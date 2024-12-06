@@ -9,10 +9,11 @@
 
     <TextView
         android:id="@+id/create_event"
+        style="@style/CustomGroupDialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Event"
-        style="@style/CustomGroupDialogTitle" />
+        android:textStyle="normal|bold" />
 
     <TableLayout
         android:layout_width="match_parent"
@@ -37,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="event name"
+                android:textColorHint="@color/light_gray"
                 android:textColor="@color/white"
                 android:textStyle="italic" />
         </TableRow>
@@ -60,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="organization name"
+                android:textColorHint="@color/light_gray"
                 android:textColor="@color/white"
                 android:textStyle="italic" />
         </TableRow>
@@ -83,6 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="short bio"
+                android:textColorHint="@color/light_gray"
                 android:textColor="@color/white"
                 android:textStyle="italic" />
         </TableRow>
@@ -106,6 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="event location"
+                android:textColorHint="@color/light_gray"
                 android:textColor="@color/white"
                 android:textStyle="italic" />
         </TableRow>
@@ -132,7 +137,8 @@
                 android:inputType="date"
                 android:textColor="@color/white"
                 android:textStyle="italic"
-                android:hint="XX/XX/XXXX" />
+                android:textColorHint="@color/light_gray"
+                android:hint="MM/DD/YYYY" />
         </TableRow>
 
         <!-- Time Row -->
@@ -153,16 +159,20 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="time"
-                android:hint="Start Time" />
+                android:hint="HH:MM [AM/PM]"
+                android:textColorHint="@color/light_gray"
+                android:textColor="@color/white"
+                android:inputType="time" />
 
             <EditText
                 android:id="@+id/editTextTimeEnd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="time"
-                android:hint="End Time" />
+                android:hint="HH:MM [AM/PM]"
+                android:textColorHint="@color/light_gray"
+                android:textColor="@color/white"
+                android:inputType="time" />
         </TableRow>
     </TableLayout>
 

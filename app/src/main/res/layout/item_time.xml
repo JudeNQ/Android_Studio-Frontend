@@ -56,7 +56,8 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="10:00AM"
+            android:hint="10:00 AM"
+            android:textColorHint="@color/light_gray"
             android:inputType="time" />
     </LinearLayout>
 
@@ -81,7 +82,8 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="12:00PM"
+            android:hint="12:00 PM"
+            android:textColorHint="@color/light_gray"
             android:inputType="time" />
 
     </LinearLayout>

@@ -57,7 +57,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
                     holder.startTime.setText("");
                     timeData.setStartTime("");
                     //Make a toast and say its invalid
-                    Toast.makeText(v.getContext(), "Invalid Time Format. Please use xx:xxAM/PM", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "Invalid Time Format. Please use xx:xx AM/PM", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 timeData.setStartTime(formattedTime); // Update the data model
@@ -73,7 +73,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
                     holder.endTime.setText("");
                     timeData.setEndTime("");
                     //Make a toast and say its invalid
-                    Toast.makeText(v.getContext(), "Invalid Time Format. Please use xx:xxAM/PM", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "Invalid Time Format. Please use xx:xx AM/PM", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 timeData.setEndTime(formattedTime);
@@ -109,12 +109,26 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
 
         //Simple regex-based parsing
         input = input.toUpperCase().replace(" ", ""); // Remove spaces and ensure uppercase
-        if (input.matches("\\d{1,2}:\\d{2}[AP]M")) {
+        if (input.matches("\\d{1,2}:\\d{2} [AP]M")) {
             return input; //Already properly formatted
         }
 
-        if (input.matches("\\d{1,2}:\\d{2}[AP]")) {
+        if (input.matches("\\d{1,2}:\\d{2} [AP]")) {
             return input + "M"; //Add missing 'M'
+        }
+
+        if (input.matches("\\d{1,2}:\\d{2}[AP]M")) {
+            //Add a space
+            String first = input.substring(0, input.length() - 2);
+            String last = input.substring(input.length() - 2);
+            return first + " " + last;
+        }
+
+        if (input.matches("\\d{1,2}:\\d{2}[AP]")) {
+            //Add a space and the missing M
+            String first = input.substring(0, input.length() - 1);
+            String last = input.substring(input.length() - 1);
+            return first + " " + last + "M";
         }
 
         if (input.matches("\\d{1,2}:\\d{2}")) {
@@ -125,7 +139,7 @@ public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.TimeViewHolder
                 int minute = Integer.parseInt(parts[1]);
                 String period = (hour >= 12) ? "PM" : "AM";
                 hour = (hour > 12) ? hour - 12 : (hour == 0 ? 12 : hour);
-                return String.format("%02d:%02d%s", hour, minute, period);
+                return String.format("%02d:%02d %s", hour, minute, period);
             } catch (NumberFormatException e) {
                 return input; // Invalid input; return as-is
             }

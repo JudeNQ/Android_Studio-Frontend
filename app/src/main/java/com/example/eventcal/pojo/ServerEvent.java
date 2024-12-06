@@ -6,7 +6,7 @@ public class ServerEvent {
     @SerializedName("name")
     public String eventName;
     @SerializedName("org")
-    public String organization;
+    public String org;
     //Start and end time should be in the 24 hr format. Ex; 14:30 & 16:00
     @SerializedName("start_time")
     public String startTime;
@@ -17,7 +17,7 @@ public class ServerEvent {
     @SerializedName("location")
     public String location;
     @SerializedName("bio")
-    public String description;
+    public String bio;
     @SerializedName("_id")
     public String eventId;
     @SerializedName("message")
@@ -25,12 +25,12 @@ public class ServerEvent {
 
     public ServerEvent(String name, String org, String startTime, String endTime, String date, String location, String description) {
         this.eventName = name;
-        this.organization = org;
+        this.org = org;
         this.startTime = startTime;
         this.endTime = endTime;
         this.date = date;
         this.location = location;
-        this.description = description;
+        this.bio = description;
     }
 }
 

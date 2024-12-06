@@ -63,7 +63,7 @@ class EventAdapter(
                         tempList.add(Event(
                             event.eventName,
                             LocalDateTime.parse(event.date, DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-                            event.description,
+                            event.bio,
                             event.eventId))
                     }
                     filteredEvents = tempList
@@ -123,6 +123,16 @@ class EventAdapter(
                     expandedPosition = RecyclerView.NO_POSITION
                     notifyItemChanged(position)
                 }
+
+                //Pre check if the event is saved by the user
+                if(UserInfo.getInstance().savedEvents.contains(eventItem.event)) {
+                    holder.saveButton.text = "Saved"
+                    holder.saveButton.isClickable = false
+                }
+                else {
+                    holder.saveButton.text = "Save"
+                }
+
                 // Handle the Save button click
                 holder.saveButton.setOnClickListener {
                     val mainActivity = context as? MainActivity

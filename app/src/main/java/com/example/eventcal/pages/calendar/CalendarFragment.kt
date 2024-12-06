@@ -2,6 +2,7 @@ package com.example.eventcal.pages.calendar
 
 import android.R
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,16 +46,11 @@ class CalendarFragment : Fragment() {
         val selectedDayTextView = binding.selectedDay
         val dayContent = binding.dayContent
 
-        //Set up the users saved events?
-        mainAcitivity.GetUsersEvents(UserInfo.getInstance().userId) {
-            if(it != null) {
-                for(event in it.data) {
-                    //Get the proper format
-                    var dateFormat : String = event.date.substring(0, 10)
-                    //Add it to the calendar
-                    calendarEvents[dateFormat] = event.eventName
-                }
-            }
+        for (event in UserInfo.getInstance().savedEvents) {
+            var format : String = event.dateTime.toString()
+            format = format.removeSuffix("T00:00")
+            Log.d("Calendar Fragment Date", format)
+            calendarEvents[format] = event.title
         }
 
 

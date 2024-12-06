@@ -19,6 +19,8 @@
         android:layout_width="273dp"
         android:layout_height="50dp"
         android:hint="group password"
+        android:inputType="textPassword"
+        android:textColorHint="@color/light_gray"
         android:textColor="@color/white"
         android:textStyle="italic" />
 

@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.eventcal.databinding.ActivityMainBinding
 import com.example.eventcal.pojo.CreateGroup
+import com.example.eventcal.pojo.CreateSchedule
 import com.example.eventcal.pojo.GroupList
 import com.example.eventcal.pojo.JoinGroup
 import com.example.eventcal.pojo.SaveEvent
@@ -111,6 +112,23 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<CreateUser>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    //Sends the make schedule request. Its uh... bad
+    public fun createSchedule(scheduleInfo : CreateSchedule, onResult : (CreateSchedule?) -> Unit) {
+        var createSchedule : CreateSchedule = scheduleInfo
+        val call = apiInterface.createSchedule(createSchedule)
+        call.enqueue(object : Callback<CreateSchedule> {
+            override fun onResponse(call: Call<CreateSchedule>, response: Response<CreateSchedule>) {
+                val user1 = response.body()
+                //Check to see the returned User Data is valid?
+                onResult(user1)
+            }
+
+            override fun onFailure(call: Call<CreateSchedule>, t: Throwable) {
                 onResult(null)
             }
         })

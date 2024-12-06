@@ -26,6 +26,9 @@ import com.example.eventcal.adapters.TimeAdapter
 import com.example.eventcal.databinding.FragmentScheduleBinding
 import com.example.eventcal.models.TimeData
 import com.example.eventcal.models.WeekDays
+import com.example.eventcal.pojo.CreateSchedule
+import com.example.eventcal.pojo.Schedule
+import com.example.eventcal.userStorage.UserInfo
 
 class ScheduleFragment : Fragment() {
     private var _binding : FragmentScheduleBinding? = null
@@ -84,7 +87,7 @@ class ScheduleFragment : Fragment() {
         // Set up listener for CreateScheduleDialog
         parentFragmentManager.setFragmentResultListener("createScheduleRequest", viewLifecycleOwner) { _, bundle ->
             @Suppress("UNCHECKED_CAST")
-            val scheduleMap = bundle.getSerializable("scheduleMap") as? HashMap<WeekDays, Pair<String, String>>
+            val scheduleMap = bundle.getSerializable("scheduleMap") as? HashMap<WeekDays, ArrayList<Pair<String, String>>>
             if (scheduleMap != null) {
                 // Use the scheduleMap as needed
                 Toast.makeText(context, "Schedule created successfully!", Toast.LENGTH_SHORT).show()
@@ -123,12 +126,31 @@ class ScheduleFragment : Fragment() {
         //Get schedules from the server and populate the recycler view
     }
 
-    fun uploadSchedule(scheduleMap: Map<WeekDays, Pair<String, String>>) {
-        println("Uploading schedule...")
+    fun uploadSchedule(scheduleMap: Map<WeekDays, List<Pair<String, String>>>) {
         //Upload the schedule to the server
-        scheduleMap.forEach { (day, time) ->
-            println("Day: $day, Start: ${time.first}, End: ${time.second}")
+        val schedule = Schedule(
+            convertToAndroidPair(scheduleMap[WeekDays.MONDAY]),
+            convertToAndroidPair(scheduleMap[WeekDays.TUESDAY]),
+            convertToAndroidPair(scheduleMap[WeekDays.WEDNESDAY]),
+            convertToAndroidPair(scheduleMap[WeekDays.THURSDAY]),
+            convertToAndroidPair(scheduleMap[WeekDays.FRIDAY]),
+            convertToAndroidPair(scheduleMap[WeekDays.SATURDAY]),
+            convertToAndroidPair(scheduleMap[WeekDays.SUNDAY])
+        )
+
+        mainActivity.createSchedule(CreateSchedule(schedule, UserInfo.getInstance().userId)) {
+            if(it == null) {
+                Toast.makeText(context, "Error uploading schedule", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(context, "Schedule uploaded successfully!", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    //Kotlin vs android pairs is wack
+    fun convertToAndroidPair(list: List<Pair<String, String>>?): List<android.util.Pair<String, String>>? {
+        return list?.map { android.util.Pair(it.first, it.second) }
     }
 
     fun showCreateDialog() {
@@ -266,7 +288,11 @@ internal class CreateScheduleDialogFragment : DialogFragment() {
             // Capture the result you want to send back to GroupFragment
             //We need to get the time data from each recycler and add it to some list to upload to the data base
             //First lets make sure the items are formatted properly
-            val scheduleMap = mutableMapOf<WeekDays, Pair<String, String>>()
+            val scheduleMap = mutableMapOf<WeekDays, ArrayList<Pair<String, String>>>()
+            //Populate the map first
+            for(weekDay in WeekDays.entries) {
+                scheduleMap[weekDay] = ArrayList<Pair<String, String>>()
+            }
             var isGood : Boolean = true
             //Loop through all adapters
             for (adapter in adapterList) {
@@ -278,7 +304,11 @@ internal class CreateScheduleDialogFragment : DialogFragment() {
                     }
                     //Otherwise add it to the map
                     else {
-                        scheduleMap[adapter.day] = Pair(item.startTime, item.endTime)
+                        //Insert the pair into the map
+                        if(!scheduleMap.containsKey(adapter.day)) {
+                            scheduleMap[adapter.day] = ArrayList<Pair<String, String>>()
+                        }
+                        scheduleMap[adapter.day]?.add(Pair(item.startTime, item.endTime))
                     }
                 }
                 //fallthrough

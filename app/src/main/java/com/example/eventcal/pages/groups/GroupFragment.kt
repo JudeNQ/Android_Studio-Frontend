@@ -172,11 +172,26 @@ class GroupFragment : Fragment(), GroupAdapter.GroupActionListener {
                 ).show()
             }
             else {
-                //The user has joined the group. Update the display?
-                UserInfo.getInstance().groups.add(groupId)
+                if(it.message == "Joining group was successful") {
+                    Toast.makeText(
+                        binding.root.context,
+                        "Joined group successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    //The user has joined the group. Update the display?
+                    UserInfo.getInstance().groups.add(groupId)
 
-                //Update the recycler view (how idk)
-                loadGroups()
+                    //Update the recycler view (how idk)
+                    loadGroups()
+                }
+                else {
+                    Toast.makeText(
+                        binding.root.context,
+                        "Incorrect Password",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
             }
         }
     }
