@@ -48,6 +48,7 @@ class SearchFragment : Fragment() {
         // Initialize RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(binding.root.context)
 
+        /*
         // TODO Tab selection listener
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -64,6 +65,7 @@ class SearchFragment : Fragment() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+         */
 
         //TODO need to fix this, not sure how orgs are stored but this should be similar to dogeteventlist below
         //Orgs are not stored, that was your job.

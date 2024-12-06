@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
     //Kind of returns (does something weird with calling "it" after)
     //the Userinfo result from server, so can compare
     //to make sure the attempt succeeded.
-    private fun createUser(userInfo : CreateUser, onResult : (CreateUser?) -> Unit) {
+    public fun createUser(userInfo : CreateUser, onResult : (CreateUser?) -> Unit) {
         var createUser : CreateUser = userInfo
         val call = apiInterface.createUser(createUser)
         call.enqueue(object : Callback<CreateUser> {
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun createEvent(serverEventInfo : ServerEvent, onResult : (ServerEvent?) -> Unit) {
+    public fun createEvent(serverEventInfo : ServerEvent, onResult : (ServerEvent?) -> Unit) {
         var createServerEvent : ServerEvent = serverEventInfo
         val call = apiInterface.createEvent(createServerEvent)
         call.enqueue(object : Callback<ServerEvent> {

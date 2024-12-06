@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
     private var _binding : FragmentHomeBinding? = null
     private lateinit var eventAdapter: EventAdapter
     private val binding get() = _binding!!
-    val mainActivity : MainActivity = activity as MainActivity
+    private lateinit var mainActivity : MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +45,8 @@ class HomeFragment : Fragment() {
         val homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        mainActivity = activity as MainActivity
 
 
         //Create an empty list for the events to be added to home page
