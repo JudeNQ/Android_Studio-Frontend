@@ -306,7 +306,7 @@ internal class CreateGroupDialogFragment : DialogFragment() {
             else {
                 // Send the result
                 parentFragmentManager.setFragmentResult("createGroupRequest", Bundle().apply {
-                    putString("name", name)
+                    putString("", name)
                     putString("password", password)
                     putString("bio", bio)
                 })

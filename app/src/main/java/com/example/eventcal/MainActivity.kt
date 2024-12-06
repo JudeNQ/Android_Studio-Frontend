@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun createEvent(serverEventInfo : ServerEvent, onResult : (ServerEvent?) -> Unit) {
+    fun createEvent(serverEventInfo : ServerEvent, onResult : (ServerEvent?) -> Unit) {
         var createServerEvent : ServerEvent = serverEventInfo
         val call = apiInterface.createEvent(createServerEvent)
         call.enqueue(object : Callback<ServerEvent> {
