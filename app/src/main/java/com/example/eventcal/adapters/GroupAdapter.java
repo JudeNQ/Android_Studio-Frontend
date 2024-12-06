@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventcal.R;
 import com.example.eventcal.models.Group;
+import com.example.eventcal.pojo.Schedule;
 import com.example.eventcal.userStorage.UserInfo;
 
 import java.util.List;
@@ -52,6 +55,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         Group group = groupList.get(position);
         holder.groupName.setText(group.getName());
         holder.groupBio.setText(group.getBio());
+        //See if the group has a schedule (so if the user is in it) add the format if applicable
+        if(group.getSchedule() == null) {
+            Log.d("Group Adapter Schedule", "The schedule is null for some reason");
+            holder.groupSchedule.setText("No Schedule");
+        }
+        else {
+            holder.groupSchedule.setText(formatSchedule(group.getSchedule()));
+        }
+
+
 
         //Set button to either join or dropdown depending on if the user is in the group
         if(UserInfo.getInstance().groups.contains(group.getId())) {
@@ -85,6 +98,50 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         });
     }
 
+    public String formatSchedule(Schedule schedule) {
+        Log.d("Group Adapter Schedule", "In formatting schedule");
+        StringBuilder output = new StringBuilder();
+        output.append("Available Times: \n");
+        output.append("Monday: \n");
+        for(Pair<String, String> time : schedule.monday) {
+            output.append(time.first).append("-").append(time.second).append("\n");
+        }
+
+        output.append("Tuesday: \n");
+        for(Pair<String, String> time : schedule.tuesday) {
+            output.append(time.first).append("-").append(time.second).append("\n");
+        }
+
+        output.append("Wednesday: \n");
+        for(Pair<String, String> time : schedule.wednesday) {
+            output.append(time.first).append("-").append(time.second).append("\n");
+        }
+
+        output.append("Thursday: \n");
+        for(Pair<String, String> time : schedule.thursday) {
+            output.append(time.first).append("-").append(time.second).append("\n");
+        }
+
+        output.append("Friday: \n");
+        for(Pair<String, String> time : schedule.friday) {
+            output.append(time.first).append("-").append(time.second).append("\n");
+        }
+
+        output.append("Saturday: \n");
+        for(Pair<String, String> time : schedule.saturday) {
+            output.append(time.first).append("-").append(time.second).append("\n");
+        }
+
+        output.append("Sunday: \n");
+        for(Pair<String, String> time : schedule.sunday) {
+            output.append(time.first).append("-").append(time.second).append("\n");
+        }
+
+        //Finalize the string builder
+        return output.toString();
+
+    }
+
     @Override
     public int getItemCount() {
         return groupList.size();
@@ -96,6 +153,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         Button joinButton;
         LinearLayout moreInfoLayout;
         TextView groupBio;
+        TextView groupSchedule;
 
         public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -104,6 +162,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             joinButton = itemView.findViewById(R.id.join_btn);
             moreInfoLayout = itemView.findViewById(R.id.more_info_layout);
             groupBio = itemView.findViewById(R.id.group_info);
+            groupSchedule = itemView.findViewById(R.id.group_schedule_info);
         }
     }
 }

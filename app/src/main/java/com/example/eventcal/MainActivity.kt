@@ -20,6 +20,7 @@ import com.example.eventcal.pojo.CreateSchedule
 import com.example.eventcal.pojo.GroupList
 import com.example.eventcal.pojo.JoinGroup
 import com.example.eventcal.pojo.SaveEvent
+import com.example.eventcal.pojo.Schedule
 import com.example.eventcal.pojo.ServerGroup
 
 
@@ -129,6 +130,22 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<CreateSchedule>, t: Throwable) {
+                onResult(null)
+            }
+        })
+    }
+
+    //Sends the get schedule request for a certain group ID
+    public fun getGroupSchedule(groupId : String, onResult : (Schedule?) -> Unit) {
+        val call = apiInterface.getSchedule(groupId)
+        call.enqueue(object : Callback<Schedule> {
+            override fun onResponse(call: Call<Schedule>, response: Response<Schedule>) {
+                val user1 = response.body()
+                //Check to see the returned User Data is valid?
+                onResult(user1)
+            }
+
+            override fun onFailure(call: Call<Schedule>, t: Throwable) {
                 onResult(null)
             }
         })

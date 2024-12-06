@@ -120,7 +120,7 @@ class HomeFragment : Fragment() {
         //Create an empty list for the events to be added to home page
         var eventList = ArrayList<Event>()
 
-        mainActivity.doGetEventList("10/11/2024") {
+        mainActivity.doGetEventList("12/06/2024") {
             if (it != null) {
                 for (event: ServerEvent in it.data) {
                     eventList.add(

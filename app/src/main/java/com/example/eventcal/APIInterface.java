@@ -9,6 +9,7 @@ import com.example.eventcal.pojo.JoinGroup;
 import com.example.eventcal.pojo.MultipleResource;
 import com.example.eventcal.pojo.SaveEvent;
 import com.example.eventcal.pojo.LoginUser;
+import com.example.eventcal.pojo.Schedule;
 import com.example.eventcal.pojo.ServerGroup;
 import com.example.eventcal.pojo.UserList;
 import com.example.eventcal.pojo.ServerEvent;
@@ -33,6 +34,9 @@ public interface APIInterface {
 
     @POST("user/createschedule/")
     Call<CreateSchedule> createSchedule(@Body CreateSchedule createSchedule);
+
+    @GET("groups/getschedule?")
+    Call<Schedule> getSchedule(@Query("group") String groupId);
 
     @POST("events/create/")
     Call<ServerEvent> createEvent(@Body ServerEvent createServerEvent);

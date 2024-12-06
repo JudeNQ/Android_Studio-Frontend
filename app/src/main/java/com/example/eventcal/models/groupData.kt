@@ -1,9 +1,12 @@
 package com.example.eventcal.models
 
-data class Group (
-    val name : String,
-    val bio : String,
-    val leader : String,
-    val members : List<String>,
-    val id : String
+import com.example.eventcal.pojo.Schedule
+
+data class Group(
+    var name: String,
+    var bio: String,
+    var leader: String,
+    var members: List<String>,
+    var id: String,
+    var schedule: Schedule?
 )

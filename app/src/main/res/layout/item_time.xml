@@ -58,6 +58,7 @@
             android:ems="10"
             android:hint="10:00 AM"
             android:textColorHint="@color/light_gray"
+            android:textColor="@color/white"
             android:inputType="time" />
     </LinearLayout>
 
@@ -84,6 +85,7 @@
             android:ems="10"
             android:hint="12:00 PM"
             android:textColorHint="@color/light_gray"
+            android:textColor="@color/white"
             android:inputType="time" />
 
     </LinearLayout>

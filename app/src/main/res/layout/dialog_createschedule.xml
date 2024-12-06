@@ -29,8 +29,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/green_dark"
-                android:paddingBottom="8dp">
+                android:background="@color/green_darker"
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -62,8 +62,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/green"
-                android:paddingBottom="8dp">
+                android:background="@color/green_darker"
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -95,8 +95,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/green_dark"
-                android:paddingBottom="8dp">
+                android:background="@color/green_darker"
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,8 +128,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/green"
-                android:paddingBottom="8dp">
+                android:background="@color/green_darker"
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -161,8 +161,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/green_dark"
-                android:paddingBottom="8dp">
+                android:background="@color/green_darker"
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -194,8 +194,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/green"
-                android:paddingBottom="8dp">
+                android:background="@color/green_darker"
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -227,8 +227,8 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/green_dark"
-                android:paddingBottom="8dp">
+                android:background="@color/green_darker"
+                android:paddingBottom="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -64,10 +64,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hidden group info"
-            android:background="@color/light_gray"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/group_schedule_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hidden Schedule info"
             android:textSize="20sp" />
 
-        <!-- Add more info views here as needed -->
 
     </LinearLayout>
 </LinearLayout>

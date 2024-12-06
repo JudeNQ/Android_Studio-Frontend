@@ -8,9 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.eventcal.MainActivity
+import com.example.eventcal.adapters.EventAdapter
 import com.example.eventcal.databinding.FragmentCalendarBinding
 import com.example.eventcal.databinding.FragmentHomeBinding
+import com.example.eventcal.models.Event
 import com.example.eventcal.pages.home.HomeViewModel
 import com.example.eventcal.userStorage.UserInfo
 import java.text.DateFormatSymbols
@@ -25,7 +29,11 @@ class CalendarFragment : Fragment() {
     private var currentDay: Int = 0
 
     // HashMap to store events for specific dates
-    private val calendarEvents: MutableMap<String, String> = HashMap()
+    private val calendarEvents: MutableMap<String, ArrayList<Event>> = HashMap()
+
+    lateinit var recyclerView: RecyclerView
+    private lateinit var eventAdapter: EventAdapter
+
     lateinit var mainAcitivity: MainActivity
 
     override fun onCreateView(
@@ -41,6 +49,9 @@ class CalendarFragment : Fragment() {
 
         mainAcitivity = activity as MainActivity
 
+        recyclerView = binding.eventRecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(root.context)
+
         //Setup calendarView and SelectedDay
         val calendarView = binding.calendarView
         val selectedDayTextView = binding.selectedDay
@@ -50,7 +61,15 @@ class CalendarFragment : Fragment() {
             var format : String = event.dateTime.toString()
             format = format.removeSuffix("T00:00")
             Log.d("Calendar Fragment Date", format)
-            calendarEvents[format] = event.title
+            if(!calendarEvents.containsKey(format)) {
+                calendarEvents[format] = ArrayList()
+            }
+            calendarEvents[format]?.add(Event(
+                event.title,
+                event.dateTime,
+                event.description,
+                event.id
+            ))
         }
 
 
@@ -69,10 +88,12 @@ class CalendarFragment : Fragment() {
 
             // Show the saved event for the selected date, if any
             if (calendarEvents.containsKey(dateKey)) {
+                Log.d("Calendar Fragment Date", "Checking date key" + dateKey)
                 val event = calendarEvents[dateKey]
-                binding.textInput.setText(event)
+                populateRecycler(event!!)
             } else {
-                binding.textInput.setText("") // Clear the text if no event is saved for the date
+                Log.d("Calendar Fragment Date", "Checking date key" + dateKey)
+                clearRecycler() // Clear the text if no event is saved for the date
             }
 
             //Handle visibilty
@@ -81,6 +102,7 @@ class CalendarFragment : Fragment() {
             }
         }
 
+        /*
         //setup up the button and textInput
         val saveButton = binding.saveButton
         val textInput = binding.textInput
@@ -94,8 +116,22 @@ class CalendarFragment : Fragment() {
                 textInput.setText("") // Clear the text input after saving
             }
         }
+         */
 
         return root
+    }
+
+    public fun populateRecycler(events : ArrayList<Event>) {
+        // Initialize EventAdapter
+        eventAdapter = EventAdapter(requireContext(), events, showSavedOnly = false) { event -> }
+        recyclerView.adapter = eventAdapter
+        eventAdapter.notifyDataSetChanged()
+    }
+
+    public fun clearRecycler() {
+        eventAdapter = EventAdapter(requireContext(), emptyList(), showSavedOnly = false) { event -> }
+        recyclerView.adapter = eventAdapter
+        eventAdapter.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {
