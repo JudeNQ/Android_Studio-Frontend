@@ -54,17 +54,29 @@ class CalendarFragment : Fragment() {
             selectedDayTextView.text = selectedDate
 
             // Show the saved event for the selected date, if any
+            val eventDisplay = binding.eventDisplay
             if (calendarEvents.containsKey(dateKey)) {
                 val event = calendarEvents[dateKey]
                 binding.textInput.setText(event)
+                eventDisplay.text = event
+                eventDisplay.visibility = View.VISIBLE
             } else {
                 binding.textInput.setText("") // Clear the text if no event is saved for the date
+                eventDisplay.text = ""
+                eventDisplay.visibility = View.GONE
             }
 
             //Handle visibilty
             if(dayContent.visibility == View.GONE){
                 dayContent.visibility = View.VISIBLE
             }
+
+            //show the text Input again when date is selected
+            binding.textInput.visibility = View.VISIBLE
+
+            //show the Save button again when date is selected
+            binding.saveButton.visibility = View.VISIBLE
+
         }
 
         //setup up the button and textInput
@@ -78,7 +90,17 @@ class CalendarFragment : Fragment() {
                 val dateKey = "$currentYear-$currentMonth-$currentDay"
                 calendarEvents[dateKey] = text // Save the text to the map with the date as the key
                 textInput.setText("") // Clear the text input after saving
+
+                val eventDisplay = binding.eventDisplay
+                eventDisplay.text = text
+                eventDisplay.visibility = View.VISIBLE
             }
+
+            //hide the text Input again after saving event
+            binding.textInput.visibility = View.GONE
+
+            //hide the save button again after saving event
+            binding.saveButton.visibility = View.GONE
         }
 
         return root
