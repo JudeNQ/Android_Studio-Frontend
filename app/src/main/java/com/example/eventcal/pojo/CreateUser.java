@@ -12,7 +12,8 @@ public class CreateUser {
     @SerializedName("message")
     public String message;
 
-    public CreateUser(String email, String password) {
+    public CreateUser(String name, String email, String password) {
+        this.name = name;
         this.email = email;
         this.password = password;
     }

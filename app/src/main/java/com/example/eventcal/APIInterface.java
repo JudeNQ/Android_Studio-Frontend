@@ -48,7 +48,7 @@ public interface APIInterface {
     @GET("groups/getGroups")
     Call<GroupList> doGetAllGroups();
 
-    @GET("events/getUsers?")
+    @GET("events/getusers?")
     Call<EventList> doGetUsersEvents(@Query("user") String userId);
 
     @GET("groups/getGroups?")

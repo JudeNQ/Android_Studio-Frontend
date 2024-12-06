@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.eventcal.MainActivity
 import com.example.eventcal.databinding.FragmentCalendarBinding
 import com.example.eventcal.databinding.FragmentHomeBinding
 import com.example.eventcal.pages.home.HomeViewModel
+import com.example.eventcal.userStorage.UserInfo
 import java.text.DateFormatSymbols
 
 class CalendarFragment : Fragment() {
@@ -23,6 +25,7 @@ class CalendarFragment : Fragment() {
 
     // HashMap to store events for specific dates
     private val calendarEvents: MutableMap<String, String> = HashMap()
+    lateinit var mainAcitivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,10 +38,25 @@ class CalendarFragment : Fragment() {
         _binding = FragmentCalendarBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        mainAcitivity = activity as MainActivity
+
         //Setup calendarView and SelectedDay
         val calendarView = binding.calendarView
         val selectedDayTextView = binding.selectedDay
         val dayContent = binding.dayContent
+
+        //Set up the users saved events?
+        mainAcitivity.GetUsersEvents(UserInfo.getInstance().userId) {
+            if(it != null) {
+                for(event in it.data) {
+                    //Get the proper format
+                    var dateFormat : String = event.date.substring(0, 10)
+                    //Add it to the calendar
+                    calendarEvents[dateFormat] = event.eventName
+                }
+            }
+        }
+
 
         //set an on date change listener on the calendarView
         calendarView.setOnDateChangeListener {view, year, month, dayofMonth ->

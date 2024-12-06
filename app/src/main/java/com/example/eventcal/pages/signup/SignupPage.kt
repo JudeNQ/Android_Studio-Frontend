@@ -1,8 +1,8 @@
-package com.example.eventcal.pages.login
+package com.example.eventcal.pages.signup
+
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -11,49 +11,61 @@ import com.example.eventcal.APIClient
 import com.example.eventcal.APIInterface
 import com.example.eventcal.MainActivity
 import com.example.eventcal.R
-import com.example.eventcal.databinding.LoginPageBinding
-import com.example.eventcal.pages.signup.SignupPage
+import com.example.eventcal.databinding.SignupPageBinding
+import com.example.eventcal.pages.login.LoginPage
+import com.example.eventcal.pojo.CreateUser
 import com.example.eventcal.pojo.LoginUser
-import com.example.eventcal.userStorage.UserInfo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+class SignupPage : AppCompatActivity() {
 
-lateinit var apiInterface : APIInterface
-
-class LoginPage : AppCompatActivity() {
-    lateinit var binding: LoginPageBinding
+    lateinit var binding: SignupPageBinding
+    lateinit var apiInterface : APIInterface
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = LoginPageBinding.inflate(layoutInflater)
+        binding = SignupPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         apiInterface = APIClient.getClient().create(APIInterface::class.java)
-        val button = findViewById<Button>(R.id.login_button)
 
-        //Set up the userData
-        setUpUserData()
-
+        val button = findViewById<Button>(R.id.signup_button)
         button.setOnClickListener {
             //Get the text from the text fields
+            val name = findViewById<EditText>(R.id.name_text).text.toString()
             val email = findViewById<EditText>(R.id.email_text).text.toString()
             val password = findViewById<EditText>(R.id.password_text).text.toString()
 
-            val login : LoginUser = LoginUser(email, password)
-            loginUser(login) {
+            if(name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(
+                    applicationContext,
+                    "Please fill out all fields",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
+            val signup : CreateUser = CreateUser(name, email, password)
+            createUser(signup) {
                 if (it != null) {
                     //The attempt worked
-                    if(it.confirmed == "True") {
-                        validLogin(it)
+                    if(it.message == "") {
+                        //Make the text fields empty
+                        findViewById<EditText>(R.id.name_text).text.clear()
+                        findViewById<EditText>(R.id.email_text).text.clear()
+                        findViewById<EditText>(R.id.password_text).text.clear()
+
+                        //Move back to the login page
+                        validSignup()
                     }
                     else {
                         //Display toast message saying incorrect information
                         Toast.makeText(
                             applicationContext,
-                            "Incorrect email or password",
+                            "Error: " + it.message.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -69,45 +81,30 @@ class LoginPage : AppCompatActivity() {
             }
         }
 
-
     }
 
     //Attempts to create a user with the given userInfo.
+    //Kind of returns (does something weird with calling "it" after)
     //the Userinfo result from server, so can compare
     //to make sure the attempt succeeded.
-    private fun loginUser(loginUserInfo : LoginUser, onResult : (LoginUser?) -> Unit) {
-        var loginUser : LoginUser = loginUserInfo
-        val call = apiInterface.login(loginUser)
-        call.enqueue(object : Callback<LoginUser> {
-            override fun onResponse(call: Call<LoginUser>, response: Response<LoginUser>) {
+    private fun createUser(userInfo : CreateUser, onResult : (CreateUser?) -> Unit) {
+        var createUser : CreateUser = userInfo
+        val call = apiInterface.createUser(createUser)
+        call.enqueue(object : Callback<CreateUser> {
+            override fun onResponse(call: Call<CreateUser>, response: Response<CreateUser>) {
                 val user1 = response.body()
                 //Check to see the returned User Data is valid?
                 onResult(user1)
             }
 
-            override fun onFailure(call: Call<LoginUser>, t: Throwable) {
+            override fun onFailure(call: Call<CreateUser>, t: Throwable) {
                 onResult(null)
             }
         })
     }
 
-    fun validLogin(user : LoginUser) {
-        //Store the user data
-        UserInfo.getInstance().userId = user.id
-
-        val intent = Intent(this, MainActivity::class.java)
+    fun validSignup() {
+        val intent = Intent(this, LoginPage::class.java)
         startActivity(intent)
     }
-
-    private fun setUpUserData() {
-        UserInfo.getInstance()
-    }
-
-    //Go to the signup page. Open up the fragment?
-    fun goToSignUp(view: View) {
-        //Go to the signup page
-        val intent = Intent(this, SignupPage::class.java)
-        startActivity(intent)
-    }
-
 }

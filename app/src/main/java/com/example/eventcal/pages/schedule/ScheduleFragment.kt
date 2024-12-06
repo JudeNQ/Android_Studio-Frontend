@@ -2,9 +2,7 @@ package com.example.eventcal.pages.schedule
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.TimePickerDialog
 import android.os.Bundle
-import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -12,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.PopupMenu
-import android.widget.TimePicker
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -28,8 +25,7 @@ import com.example.eventcal.R
 import com.example.eventcal.adapters.TimeAdapter
 import com.example.eventcal.databinding.FragmentScheduleBinding
 import com.example.eventcal.models.TimeData
-import java.util.Calendar
-
+import com.example.eventcal.models.WeekDays
 
 class ScheduleFragment : Fragment() {
     private var _binding : FragmentScheduleBinding? = null
@@ -85,9 +81,16 @@ class ScheduleFragment : Fragment() {
             popupMenu.show()
         }
 
-        // Set up listener for CreateGroupDialog
-        parentFragmentManager.setFragmentResultListener("createScheduleRequest", this) { _, bundle ->
-            onCreateSchedulePositiveClick()
+        // Set up listener for CreateScheduleDialog
+        parentFragmentManager.setFragmentResultListener("createScheduleRequest", viewLifecycleOwner) { _, bundle ->
+            @Suppress("UNCHECKED_CAST")
+            val scheduleMap = bundle.getSerializable("scheduleMap") as? HashMap<WeekDays, Pair<String, String>>
+            if (scheduleMap != null) {
+                // Use the scheduleMap as needed
+                Toast.makeText(context, "Schedule created successfully!", Toast.LENGTH_SHORT).show()
+                uploadSchedule(scheduleMap)
+                loadSchedules()
+            }
         }
 
         return root
@@ -117,7 +120,15 @@ class ScheduleFragment : Fragment() {
     }
 
     fun loadSchedules() {
-        //Load the users schedules
+        //Get schedules from the server and populate the recycler view
+    }
+
+    fun uploadSchedule(scheduleMap: Map<WeekDays, Pair<String, String>>) {
+        println("Uploading schedule...")
+        //Upload the schedule to the server
+        scheduleMap.forEach { (day, time) ->
+            println("Day: $day, Start: ${time.first}, End: ${time.second}")
+        }
     }
 
     fun showCreateDialog() {
@@ -138,32 +149,7 @@ class ScheduleFragment : Fragment() {
 
 internal class CreateScheduleDialogFragment : DialogFragment() {
 
-    enum class weekDays {
-        MONDAY,
-        TUESDAY,
-        WEDNESDAY,
-        THURSDAY,
-        FRIDAY,
-        SATURDAY,
-        SUNDAY
-    }
-
-    private var selectedDay: weekDays? = null
-    private var startTime : String = ""
-    private var endTime : String = ""
-
-    /*
-    private var mondayAdapter: TimeAdapter? = null
-    private var tuesdayAdapter: TimeAdapter? = null
-    private var wednesdayAdapter: TimeAdapter? = null
-    private var thursdayAdapter: TimeAdapter? = null
-    private var fridayAdapter: TimeAdapter? = null
-    private var saturdayAdapter: TimeAdapter? = null
-    private var sundayAdapter: TimeAdapter? = null
-
-     */
-
-    private var currentAdapter: TimeAdapter? = null
+    var adapterList : ArrayList<TimeAdapter> = ArrayList<TimeAdapter>()
 
     override fun onStart() {
         super.onStart()
@@ -195,111 +181,81 @@ internal class CreateScheduleDialogFragment : DialogFragment() {
         val saturdayRecycler = view.findViewById<RecyclerView>(R.id.time_period_recycler_view_sat)
         val sundayRecycler = view.findViewById<RecyclerView>(R.id.time_period_recycler_view_sun)
 
-        //Set up layout managers for each RecyclerView (This is real gross)
-        val mondayLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val tuesdayLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val wednesdayLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val thursdayLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val fridayLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val saturdayLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val sundayLayoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-
-        //Set individual layout managers to the corresponding RecyclerViews
-        mondayRecycler.layoutManager = mondayLayoutManager
-        tuesdayRecycler.layoutManager = tuesdayLayoutManager
-        wednesdayRecycler.layoutManager = wednesdayLayoutManager
-        thursdayRecycler.layoutManager = thursdayLayoutManager
-        fridayRecycler.layoutManager = fridayLayoutManager
-        saturdayRecycler.layoutManager = saturdayLayoutManager
-        sundayRecycler.layoutManager = sundayLayoutManager
-
         // Set up adapters for each day of the week
-        val mondayAdapter = TimeAdapter(ArrayList<TimeData>()) { timeData ->
-            // Handle time picker
-        }
-        val tuesdayAdapter = TimeAdapter(ArrayList<TimeData>()) { timeData ->
-            // Handle time picker
-        }
-        val wednesdayAdapter = TimeAdapter(ArrayList<TimeData>()) { timeData ->
-            // Handle time picker
-        }
-        val thursdayAdapter = TimeAdapter(ArrayList<TimeData>()) { timeData ->
-            // Handle time picker
-        }
-        val fridayAdapter = TimeAdapter(ArrayList<TimeData>()) { timeData ->
-            // Handle time picker
-        }
-        val saturdayAdapter = TimeAdapter(ArrayList<TimeData>()) { timeData ->
-            // Handle time picker
-        }
-        val sundayAdapter = TimeAdapter(ArrayList<TimeData>()) { timeData ->
-            // Handle time picker
-        }
+        val mondayAdapter = TimeAdapter(ArrayList<TimeData>(), WeekDays.MONDAY)
+        val tuesdayAdapter = TimeAdapter(ArrayList<TimeData>(), WeekDays.TUESDAY)
+        val wednesdayAdapter = TimeAdapter(ArrayList<TimeData>(), WeekDays.WEDNESDAY)
+        val thursdayAdapter = TimeAdapter(ArrayList<TimeData>(), WeekDays.THURSDAY)
+        val fridayAdapter = TimeAdapter(ArrayList<TimeData>(), WeekDays.FRIDAY)
+        val saturdayAdapter = TimeAdapter(ArrayList<TimeData>(), WeekDays.SATURDAY)
+        val sundayAdapter = TimeAdapter(ArrayList<TimeData>(), WeekDays.SUNDAY)
+
+        adapterList.add(mondayAdapter)
+        adapterList.add(tuesdayAdapter)
+        adapterList.add(wednesdayAdapter)
+        adapterList.add(thursdayAdapter)
+        adapterList.add(fridayAdapter)
+        adapterList.add(saturdayAdapter)
+        adapterList.add(sundayAdapter)
 
         //Set the adapters to their corresponding RecyclerViews
         mondayRecycler.adapter = mondayAdapter
+        mondayRecycler.layoutManager = LinearLayoutManager(context)
+        mondayRecycler.setNestedScrollingEnabled(true);
+
+        //Manually set the height so it doesn't crash after deleting something
         tuesdayRecycler.adapter = tuesdayAdapter
+        tuesdayRecycler.layoutManager = LinearLayoutManager(context)
+        tuesdayRecycler.setNestedScrollingEnabled(true);
+
         wednesdayRecycler.adapter = wednesdayAdapter
+        wednesdayRecycler.layoutManager = LinearLayoutManager(context)
+        wednesdayRecycler.setNestedScrollingEnabled(true);
+
         thursdayRecycler.adapter = thursdayAdapter
+        thursdayRecycler.layoutManager = LinearLayoutManager(context)
+        thursdayRecycler.setNestedScrollingEnabled(true);
+
         fridayRecycler.adapter = fridayAdapter
+        fridayRecycler.layoutManager = LinearLayoutManager(context)
+        fridayRecycler.setNestedScrollingEnabled(true);
+
         saturdayRecycler.adapter = saturdayAdapter
+        saturdayRecycler.layoutManager = LinearLayoutManager(context)
+        saturdayRecycler.setNestedScrollingEnabled(true);
+
         sundayRecycler.adapter = sundayAdapter
+        sundayRecycler.layoutManager = LinearLayoutManager(context)
+        sundayRecycler.setNestedScrollingEnabled(true);
 
         //Set up button listeners for each day
         mondayButton.setOnClickListener {
-            selectedDay = weekDays.MONDAY
-            currentAdapter = mondayAdapter
-            val dialog = TimePickerFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(parentFragmentManager, "TimePickerDialog")
+            //Add another item to the adapter
+            mondayAdapter.addTimeData()
         }
 
         tuesdayButton.setOnClickListener {
-            selectedDay = weekDays.TUESDAY
-            currentAdapter = tuesdayAdapter
-            val dialog = TimePickerFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(parentFragmentManager, "TimePickerDialog")
+            tuesdayAdapter.addTimeData()
         }
 
         wednesdayButton.setOnClickListener {
-            selectedDay = weekDays.WEDNESDAY
-            currentAdapter = wednesdayAdapter
-            val dialog = TimePickerFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(parentFragmentManager, "TimePickerDialog")
+            wednesdayAdapter.addTimeData()
         }
 
         thursdayButton.setOnClickListener {
-            selectedDay = weekDays.THURSDAY
-            currentAdapter = thursdayAdapter
-            val dialog = TimePickerFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(parentFragmentManager, "TimePickerDialog")
+            thursdayAdapter.addTimeData()
         }
 
         fridayButton.setOnClickListener {
-            selectedDay = weekDays.FRIDAY
-            currentAdapter = fridayAdapter
-            val dialog = TimePickerFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(parentFragmentManager, "TimePickerDialog")
+            fridayAdapter.addTimeData()
         }
 
         saturdayButton.setOnClickListener {
-            selectedDay = weekDays.SATURDAY
-            currentAdapter = saturdayAdapter
-            val dialog = TimePickerFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(parentFragmentManager, "TimePickerDialog")
+            saturdayAdapter.addTimeData()
         }
 
         sundayButton.setOnClickListener {
-            selectedDay = weekDays.SUNDAY
-            currentAdapter = sundayAdapter
-            val dialog = TimePickerFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(parentFragmentManager, "TimePickerDialog")
+            sundayAdapter.addTimeData()
         }
 
         // Set up button click listeners
@@ -308,11 +264,44 @@ internal class CreateScheduleDialogFragment : DialogFragment() {
 
         positiveButton.setOnClickListener {
             // Capture the result you want to send back to GroupFragment
-            //Actually suffer and find some way to do this
-            parentFragmentManager.setFragmentResult("createScheduleRequest", Bundle().apply {
-            })
-            //Then dismiss
-            dismiss()
+            //We need to get the time data from each recycler and add it to some list to upload to the data base
+            //First lets make sure the items are formatted properly
+            val scheduleMap = mutableMapOf<WeekDays, Pair<String, String>>()
+            var isGood : Boolean = true
+            //Loop through all adapters
+            for (adapter in adapterList) {
+                for (item in adapter.getTimeDataList()) {
+                    //If one item is invalid, we want to stop
+                    if (item.startTime.isBlank() || item.endTime.isBlank()) {
+                        isGood = false
+                        break
+                    }
+                    //Otherwise add it to the map
+                    else {
+                        scheduleMap[adapter.day] = Pair(item.startTime, item.endTime)
+                    }
+                }
+                //fallthrough
+                if (!isGood) break
+            }
+
+            //We messed up somewhere
+            if (!isGood) {
+                Toast.makeText(
+                    context,
+                    "Invalid Format. Make sure all of your times are formatted correctly xx:xxAM/PM",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            //We want to send over the map to the fragment
+            else {
+                //Use setFragmentResult to send the data back
+                val bundle = Bundle().apply {
+                    putSerializable("scheduleMap", HashMap(scheduleMap))
+                }
+                parentFragmentManager.setFragmentResult("createScheduleRequest", bundle)
+                dismiss()
+            }
         }
 
         negativeButton.setOnClickListener {
@@ -324,57 +313,5 @@ internal class CreateScheduleDialogFragment : DialogFragment() {
         // Pass null as the parent view because it's going in the dialog layout.
         builder.setView(view)
         return builder.create()
-    }
-
-    // Method to handle the time picked from TimePickerFragment
-    fun onTimePicked(hourOfDay: Int, minute: Int) {
-        // Do something with the time
-        if(startTime == "") {
-            startTime = "$hourOfDay:$minute"
-            val dialog = TimePickerFragment()
-            dialog.setTargetFragment(this, 0)
-            dialog.show(parentFragmentManager, "TimePickerDialog")
-        }
-        else {
-            endTime = "$hourOfDay:$minute"
-            checkTime();
-        }
-    }
-
-    fun checkTime() {
-        if(startTime != "" && endTime != "") {
-            //Update the time for a thing.
-            //Toast.makeText(context, "Time set: " + startTime + " - " + endTime, Toast.LENGTH_SHORT).show()
-            //Make the time data object (to add to the recycler view
-            val timeData = TimeData(startTime, endTime)
-            currentAdapter?.addTimeData(timeData)
-            Toast.makeText(context, "Time added " + currentAdapter?.itemCount.toString(), Toast.LENGTH_SHORT).show()
-
-            //Reset everything so we're good for the next one
-            startTime = ""
-            endTime = ""
-            currentAdapter = null;
-        }
-    }
-}
-
-internal class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Use the current time as the default values for the picker.
-        val c = Calendar.getInstance()
-        val hour = c.get(Calendar.HOUR_OF_DAY)
-        val minute = c.get(Calendar.MINUTE)
-
-        // Create a new instance of TimePickerDialog and return it.
-        return TimePickerDialog(activity, this, hour, minute, DateFormat.is24HourFormat(activity))
-    }
-
-    override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        //Send the selected time back to the target fragment
-        val targetFragment = targetFragment
-        if (targetFragment is CreateScheduleDialogFragment) {
-            targetFragment.onTimePicked(hourOfDay, minute)
-        }
     }
 }

@@ -96,26 +96,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //Attempts to create a user with the given userInfo.
-    //Kind of returns (does something weird with calling "it" after)
-    //the Userinfo result from server, so can compare
-    //to make sure the attempt succeeded.
-    private fun createUser(userInfo : CreateUser, onResult : (CreateUser?) -> Unit) {
-        var createUser : CreateUser = userInfo
-        val call = apiInterface.createUser(createUser)
-        call.enqueue(object : Callback<CreateUser> {
-            override fun onResponse(call: Call<CreateUser>, response: Response<CreateUser>) {
-                val user1 = response.body()
-                //Check to see the returned User Data is valid?
-                onResult(user1)
-            }
-
-            override fun onFailure(call: Call<CreateUser>, t: Throwable) {
-                onResult(null)
-            }
-        })
-    }
-
     private fun createEvent(serverEventInfo : ServerEvent, onResult : (ServerEvent?) -> Unit) {
         var createServerEvent : ServerEvent = serverEventInfo
         val call = apiInterface.createEvent(createServerEvent)

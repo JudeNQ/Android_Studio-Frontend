@@ -1,6 +1,8 @@
 package com.example.eventcal.models
 
-data class TimeData (
-    val startTime : String,
-    val endTime : String,
-)
+import java.io.Serializable
+
+data class TimeData(
+    var startTime: String,
+    var endTime: String,
+) : Serializable

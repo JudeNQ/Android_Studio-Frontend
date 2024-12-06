@@ -31,6 +31,7 @@
             android:textSize=".2in"/>
 
         <EditText
+            android:id="@+id/name_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -42,6 +43,7 @@
             android:padding="18dp"/>
 
         <EditText
+            android:id="@+id/email_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -53,6 +55,7 @@
             android:padding="18dp"/>
 
         <EditText
+            android:id="@+id/password_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -64,6 +67,7 @@
             android:padding="18dp"/>
 
         <Button
+            android:id="@+id/signup_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Continue"
